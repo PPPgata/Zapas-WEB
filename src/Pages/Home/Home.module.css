@@ -1,5 +1,11 @@
 *{
+  font-family: "Inter", sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+.section_1 {
+  height: 800px;
+  background-color: rgb(47, 0, 255);
 }

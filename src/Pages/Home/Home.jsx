@@ -1,11 +1,19 @@
 import React from 'react'
-import Header from '../../Components/Header/Header'
+import NavBar from '../../Components/NavBar/NavBar'
+import st from "./Home.module.css"
 
 const Home = () => {
   return (
-    <div>
-      <Header />
-    </div>
+    <>
+      <div className={st.section_1}>
+        <header>
+          <NavBar />
+        </header>
+        <main>
+
+        </main>
+      </div>
+    </>
   )
 }
 
