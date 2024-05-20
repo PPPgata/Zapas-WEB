@@ -1,4 +1,4 @@
-*{
+* {
   font-family: "Inter", sans-serif;
   margin: 0;
   padding: 0;
@@ -17,20 +17,21 @@
   width: 100%;
   display: flex;
   justify-content: space-around;
+  margin-top: 150px;
 }
 
-.textsContainer_1{
+.textsContainer_1 {
   display: flex;
   flex-direction: column;
   color: #fff;
 }
 
-.textsContainer_1 h2{
+.textsContainer_1 h2 {
   font-size: 2rem;
   font-weight: 700;
 }
 
-.textsContainer_1 h1{
+.textsContainer_1 h1 {
   width: 650px;
   font-size: 4rem;
   font-weight: 700;
@@ -39,13 +40,14 @@
 
 .textsContainer_1 span {
   font-size: 1.5rem;
-  font-weight: 600;
-  width: 650px;
+  font-weight: 500;
+  width: 620px;
+  padding: 20px 0;
 }
 
-.textZapas{
+.textZapas {
   display: inline-block;
-  background-color: #0081A7;
+  background-color: #0081a7;
   padding: 5px 10px;
   align-self: flex-start;
 }
@@ -55,28 +57,47 @@
   text-decoration: none;
   color: #fff;
   font-size: 1.3rem;
-  background-color: #0081A7;
+  background-color: #0081a7;
   border-radius: 39px;
   align-self: flex-start;
 }
 
-.formsContainer {
-}
-
-.itemsForms {
+.itensForms {
+  width: 650px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   color: #fff;
+  padding: 0 40px;
 }
 
-.itemsForms ul li {
+.tensForms p {
+  text-align: right;
+}
+
+.itensForms h2 {
+  font-size:2.3rem;
+  font-weight: 700;
+}
+
+.itensForms p {
+  font-size: 1.2rem;
+  font-weight: 500;
+  padding: 10px 0;
+}
+
+.itensForms ul li {
   list-style: none;
   margin: 20px 0;
+  text-align: center;
 }
 
-.itemsForms ul li input {
+.itensForms ul li a{
+  background-color: #198754;
+  width: 100%;
+}
+
+.itensForms ul li input {
   width: 600px;
   height: 60px;
   border: none;
@@ -85,7 +106,7 @@
   font-size: 1.2rem;
 }
 
-.itemsForms ul li input::placeholder {
-  color: #000000b7;
+.itensForms ul li input::placeholder {
+  color: #00000065;
   padding: 0 20px;
 }

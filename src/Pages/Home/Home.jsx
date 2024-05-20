@@ -20,30 +20,33 @@ const Home = () => {
                 Acesso remoto e alertas de baixo estoque inclusos!
               </span>
               <a className={st.buttonCadastro} href="#">
-                Cadastre - se
+                Cadastre-se
               </a>
             </div>
 
-            <div className={st.formsContainer}>
-              <div className={st.itemsForms}>
-                <h2>Potencialize seu estoque com a Zapas!</h2>
-                <p>
-                  Transforme sua gestão de estoque com eficiência. Solicite um
-                  orçamento personalizado e descubra como otimizar seus
-                  processos agora.
-                </p>
-                <ul>
-                  <li>
-                    <input placeholder="Name ..." type="text" />
-                  </li>
-                  <li>
-                    <input placeholder="E-mail ..." type="text" />
-                  </li>
-                  <li>
-                    <input placeholder="Mensagem ..." type="text" />
-                  </li>
-                </ul>
-              </div>
+            <div className={st.itensForms}>
+              <h2>Potencialize seu estoque com a Zapas!</h2>
+              <p>
+                Transforme sua gestão de estoque com eficiência. Solicite um
+                orçamento personalizado e descubra como otimizar seus
+                processos agora.
+              </p>
+              <ul>
+                <li>
+                  <input placeholder="Name" type="text" />
+                </li>
+                <li>
+                  <input placeholder="E-mail " type="text" />
+                </li>
+                <li>
+                  <input placeholder="Mensagem " type="text" />
+                </li>
+                <li>
+                  <a className={st.buttonCadastro} href="#">
+                  Enviar contato
+                  </a>
+                </li>
+              </ul>
             </div>
           </div>
         </main>
