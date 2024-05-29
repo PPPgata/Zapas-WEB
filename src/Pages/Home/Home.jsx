@@ -112,7 +112,7 @@ const Home = () => {
             <p>+55 (49) 99999-9999</p>
           </div>
         </div>
-        <p>
+        <p className={st.footerDireitos}>
           © 2024 Zapas: Controle seu estoque de forma eficiente e remota!.
           Direitos reservados.
         </p>

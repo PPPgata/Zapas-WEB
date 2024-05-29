@@ -173,12 +173,30 @@
 }
 
 footer{
+  height: 200px;
   width: 100%;
-  background-color: #0081A7; 
+  background-color: #0081A7;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
 }
 
 .contentFooter {
+  width: 1360px;
   display: flex;
   justify-content: space-between;
   margin: 0 100px;
+  color: #fff;
+}
+
+.contact {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footerDireitos {
+  color: #fff;
+  margin-top: 20px;
 }
