@@ -4,6 +4,7 @@ import st from "./Home.module.css";
 import logo from "../../assets/img/Logo.svg";
 import mulherEstoque from "../../assets/img/mulherEstoque.png";
 import mapaBrasil from "../../assets/img/mapaBrasil.svg";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
@@ -22,9 +23,9 @@ const Home = () => {
                 Otimize seu estoque com nossa Implantação de Sistema de Estoque.
                 Acesso remoto e alertas de baixo estoque inclusos!
               </span>
-              <a className={st.buttonCadastro} href="#">
+              <Link to="/cadastro" className={st.buttonCadastro}>
                 Cadastre-se
-              </a>
+              </Link>
             </div>
 
             <div className={st.itensForms}>
@@ -59,8 +60,8 @@ const Home = () => {
         <img src={mulherEstoque} alt="mulherEstoque" />
         <div className={st.texts_controle}>
           <h2 className={st.subtitle}>
-            Zapas: Controle seu estoque de qualquer lugar com alertas de
-            baixo estoque!
+            Zapas: Controle seu estoque de qualquer lugar com alertas de baixo
+            estoque!
           </h2>
           <p className={st.textSections}>
             Bem-vindo à Disitoque, sua solução completa em Sistema de Estoque!
@@ -95,9 +96,9 @@ const Home = () => {
             baixo para gerenciar seu negócio de forma eficiente. Conte conosco
             para otimizar sua gestão!
           </p>
-          <a className={st.buttonCadastro} href="#">
-            Inicie de graça
-          </a>
+          <Link to="/cadastro" className={st.buttonCadastro}>
+                Inicie de graça
+          </Link>
         </div>
 
         <img src={mapaBrasil} alt="Mapa do Brasil" />

@@ -2,6 +2,7 @@ import React from "react";
 import st from "../Cadastro/Cadastro.module.css";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
+import { Link } from "react-router-dom";
 
 const Cadastro = () => {
   const handleClickRegister = (values) => console.log(values);
@@ -76,6 +77,8 @@ const Cadastro = () => {
                 className="form-error"
               />
             </div>
+            
+            <p>Ja tem cadastro? <Link to="/login" >Login</Link></p>
             <button className="button" type="submit">
               Continue o registro
             </button>
@@ -116,6 +119,7 @@ const Cadastro = () => {
                 className="form-error"
               />
             </div>
+            <p>Ja tem cadastro? <Link to="/login" >Login</Link></p>
             <button>
               Registre - se
             </button>
