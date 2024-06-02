@@ -59,7 +59,7 @@ const Home = () => {
         <img src={mulherEstoque} alt="mulherEstoque" />
         <div className={st.texts_controle}>
           <h2 className={st.subtitle}>
-            Disitoque: Controle seu estoque de qualquer lugar com alertas de
+            Zapas: Controle seu estoque de qualquer lugar com alertas de
             baixo estoque!
           </h2>
           <p className={st.textSections}>
