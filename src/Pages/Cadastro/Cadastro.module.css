@@ -1,0 +1,111 @@
+.content {
+  display: flex;
+  align-items: center;
+  height: 100vh;
+}
+
+.welcome {
+  width: 50%;
+  height: 100vh;
+  background-color: #0081a7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.welcome img {
+  width: 70%;
+}
+
+.form {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+.signUp_form {
+  width: 60%;
+}
+
+.form h1 {
+  font-size: 40px;
+}
+
+.register_form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.form_field {
+  box-sizing: border-box;
+  border-radius: 68px;
+  width: 100%;
+  padding: 15px;
+  margin-top: 10px;
+  border: 1px solid #000;
+  display: flex;
+  flex-direction: column;
+  font-size: 20px;
+}
+
+.form_error {
+  width: 100%;
+  color: #ff1212;
+}
+
+.links {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+}
+
+.button {
+  width: 100%;
+  padding: 15px;
+  border-radius: 68px;
+  background-color: #0081a7;
+  color: #fff;
+  cursor: pointer;
+  border: none;
+  font-size: 20px;
+}
+
+.button:hover {
+  background-color: #02698b;
+}
+
+.link {
+  text-decoration: none;
+  cursor: pointer;
+  color: #0081a7;
+  font-weight: 600;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.passwords {
+  display: flex   ;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+
+}
+
+.enterprise {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.register {
+  margin: 10px 0;
+}

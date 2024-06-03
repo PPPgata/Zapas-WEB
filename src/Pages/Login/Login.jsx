@@ -3,6 +3,7 @@ import st from "./Login.module.css";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import teamWork from "../../assets/img/Team_work.png";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const handleClickLogin = (values) => console.log(values);
@@ -26,13 +27,13 @@ const Login = () => {
           <img src={teamWork} alt="Pessoas carregando blocos de brinquedo" />
         </div>
         <div className={st.form}>
-          <h1>Sign Up</h1>
+          <h1>Realize seu login</h1>
           <Formik
             initialValues={{ email: "", password: "" }}
             onSubmit={handleClickLogin}
             validationSchema={validationLogin}
           >
-            <Form className="login-form">
+            <Form className={st.login_form}>
               <div className="login-group">
                 <Field
                   name="email"
@@ -58,7 +59,11 @@ const Login = () => {
                   className={st.form_error}
                 />
               </div>
-              <button className="button" type="submit">
+              <div className={st.links}>
+                <p>Não tem cadastro? <Link className={st.link} to={"/cadastro"}>Cadastre - se</Link></p>
+                <p><Link className={st.link} to={"/esqueceuSenha"}>Esqueceu sua senha?</Link></p>
+              </div>
+              <button className={st.button} type="submit">
                 Login
               </button>
             </Form>

@@ -3,6 +3,7 @@ import st from "../Cadastro/Cadastro.module.css";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { Link } from "react-router-dom";
+import teamWork from "../../assets/img/Team_work.png";
 
 const Cadastro = () => {
   const handleClickRegister = (values) => console.log(values);
@@ -34,99 +35,90 @@ const Cadastro = () => {
   });
 
   return (
-    <>
-      <div className={st.container}>
-        <h1>Cadastre - se</h1>
+    <div className={st.content}>
+      <div className={st.form}>
+        <h1>Cadastre-se</h1>
         <Formik
-          initialValues={{ }}
+          initialValues={{}}
           onSubmit={handleClickRegister}
           validationSchema={validationRegister}
         >
-          <Form className="signUp-form">
-            <div className="signUp-group">
-              <Field name="email" className="form-field" placeholder="Email" />
-              <ErrorMessage
-                name="email"
-                component="span"
-                className="form-error"
-              />
+          <Form className={st.signUp_form}>
+            <div className={st.register_form}>
+              <Field name="email" className={st.form_field} placeholder="Email" />
+              <ErrorMessage name="email" component="span" className={st.form_error} />
             </div>
-            <div className="signUp-group">
-              <Field
-                name="password"
-                className="form-field"
-                placeholder="Senha"
-                type="password"
-              />
-              <ErrorMessage
-                name="password"
-                component="span"
-                className="form-error"
-              />
+              <div className={st.passwords}>
+              <div className={st.register_form}>
+                <Field
+                  name="password"
+                  className={st.form_field}
+                  placeholder="Senha"
+                  type="password"
+                />
+                <ErrorMessage name="password" component="span" className={st.form_error} />
+              </div>
+              <div className={st.register_form}>
+                <Field
+                  name="confirmPassword"
+                  className={st.form_field}
+                  placeholder="Confirme sua senha"
+                  type="password"
+                />
+                <ErrorMessage
+                  name="confirmPassword"
+                  component="span"
+                  className={st.form_error}
+                />
+              </div>
             </div>
-            <div className="signUp-group">
-              <Field
-                name="confirmPassword"
-                className="form-field"
-                placeholder="Confirme sua senha"
-                type="password"
-              />
-              <ErrorMessage
-                name="confirmPassword"
-                component="span"
-                className="form-error"
-              />
-            </div>
-            
-            <p>Ja tem cadastro? <Link to="/login" >Login</Link></p>
-            <button className="button" type="submit">
-              Continue o registro
-            </button>
-            <div className="signUp-group">
+            <div className={st.register_form}>
               <Field
                 name="enterpriseName"
-                className="form-field"
+                className={st.form_field}
                 placeholder="Nome da sua empresa"
               />
               <ErrorMessage
                 name="enterpriseName"
                 component="span"
-                className="form-error"
+                className={st.form_error}
               />
             </div>
-            <div className="signUp-group">
-              <Field
-                name="enterpriseSegment"
-                className="form-field"
-                placeholder="Qual seu segmento"
-              />
-              <ErrorMessage
-                name="enterpriseSegment"
-                component="span"
-                className="form-error"
-              />
+            <div className={st.enterprise}>
+              <div className={st.register_form}>
+                <Field
+                  name="enterpriseSegment"
+                  className={st.form_field}
+                  placeholder="Segmento"
+                />
+                <ErrorMessage
+                  name="enterpriseSegment"
+                  component="span"
+                  className={st.form_error}
+                />
+              </div>
+              <div className={st.register_form}>
+                <Field
+                  name="cnpj"
+                  className={st.form_field}
+                  placeholder="CNPJ"
+                  type="number"
+                />
+                <ErrorMessage name="cnpj" component="span" className={st.form_error} />
+              </div>
             </div>
-            <div className="signUp-group">
-              <Field
-                name="cnpj"
-                className="form-field"
-                placeholder="CNPJ"
-                type="number"
-              />
-              <ErrorMessage
-                name="cnpj"
-                component="span"
-                className="form-error"
-              />
-            </div>
-            <p>Ja tem cadastro? <Link to="/login" >Login</Link></p>
-            <button>
-              Registre - se
+            <p className={st.register}>Já tem cadastro? <Link className={st.link} to="/login">Login</Link></p>
+            <button className={st.button} type="submit">
+              Registre-se
             </button>
           </Form>
         </Formik>
       </div>
-    </>
+      <div className={st.welcome}>
+        <h1>Bem vindo!</h1>
+        <img src={teamWork} alt="Pessoas carregando blocos de brinquedo" />
+      </div>
+    </div>
   );
 };
 
