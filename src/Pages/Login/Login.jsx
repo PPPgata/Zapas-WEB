@@ -60,11 +60,22 @@ const Login = () => {
                 />
               </div>
               <div className={st.links}>
-                <p>Não tem cadastro? <Link className={st.link} to={"/cadastro"}>Cadastre - se</Link></p>
-                <p><Link className={st.link} to={"/esqueceuSenha"}>Esqueceu sua senha?</Link></p>
+                <p>
+                  Não tem cadastro?{" "}
+                  <Link className={st.link} to={"/cadastro"}>
+                    Cadastre - se
+                  </Link>
+                </p>
+                <p>
+                  <Link className={st.link} to={"/esqueceuSenha"}>
+                    Esqueceu sua senha?
+                  </Link>
+                </p>
               </div>
               <button className={st.button} type="submit">
-                Login
+                <Link className={st.linkButton} to={"/dashboard"}>
+                  Login
+                </Link>
               </button>
             </Form>
           </Formik>

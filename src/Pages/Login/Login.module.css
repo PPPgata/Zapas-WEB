@@ -70,10 +70,12 @@
   cursor: pointer;
   border: none;
   font-size: 20px;
+  transition: 0.15s ease;
 }
 
 .button:hover {
   background-color: #02698b;
+  scale: 1.01;
 }
 
 .link {
@@ -81,6 +83,13 @@
   cursor: pointer;
   color: #0081a7;
   font-weight: 600;
+}
+
+.linkButton {
+  text-decoration: none;
+  cursor: pointer;
+  color: #ffffff;
+  font-weight: 500;
 }
 
 .link:hover {
