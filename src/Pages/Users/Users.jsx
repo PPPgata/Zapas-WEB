@@ -1,12 +1,12 @@
 import React from 'react'
 import SideBar from '../../Components/SideBar/SideBar'
 
-const Dashboard = () => {
+const Users = () => {
   return (
-    <>
+    <div>
       <SideBar />
-    </>
+    </div>
   )
 }
 
-export default Dashboard;
+export default Users

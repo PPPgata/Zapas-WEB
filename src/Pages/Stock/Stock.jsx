@@ -1,7 +1,7 @@
 import React from 'react'
 import SideBar from '../../Components/SideBar/SideBar'
 
-const Dashboard = () => {
+const Stock = () => {
   return (
     <>
       <SideBar />
@@ -9,4 +9,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard;
+export default Stock

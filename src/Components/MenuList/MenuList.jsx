@@ -8,64 +8,36 @@ import {
   LogoutOutlined,
   HistoryOutlined,
 } from "@ant-design/icons";
-import { Link } from "react-router-dom";
-
+import { Link, useLocation } from "react-router-dom";
 
 const MenuList = () => {
+  const location = useLocation();
+  const path = location.pathname.split("/")[1];
+
   return (
     <Menu
       theme="dark"
       mode="inline"
       className={st.menu_bar}
-      defaultSelectedKeys={["home"]}
+      defaultSelectedKeys={[path]}
     >
-      <Menu.Item
-        key="home"
-        icon={<HomeOutlined style={{ fontSize: "23px" }} />}
-      >
-        <Link to="/dashboard">
-        Home
-        </Link>
+      <Menu.Item key="dashboard" icon={<HomeOutlined style={{ fontSize: "23px" }} />}>
+        <Link to="/dashboard">Home</Link>
       </Menu.Item>
-      <Menu.Item
-        key="stock"
-        icon={<InboxOutlined style={{ fontSize: "23px" }} />}
-      >
-        <Link to="/estoques">
-        Estoques
-        </Link>
+      <Menu.Item key="estoques" icon={<InboxOutlined style={{ fontSize: "23px" }} />}>
+        <Link to="/estoques">Estoques</Link>
       </Menu.Item>
-      <Menu.Item
-        key="itens"
-        icon={<PlusOutlined style={{ fontSize: "23px" }} />}
-      >
-        <Link to="/itens">
-        Itens
-        </Link>
+      <Menu.Item key="itens" icon={<PlusOutlined style={{ fontSize: "23px" }} />}>
+        <Link to="/itens">Itens</Link>
       </Menu.Item>
-      <Menu.Item
-        key="users"
-        icon={<UsergroupAddOutlined style={{ fontSize: "23px" }} />}
-      >
-        <Link to="/usuarios">
-        Usuários
-        </Link>
+      <Menu.Item key="usuarios" icon={<UsergroupAddOutlined style={{ fontSize: "23px" }} />}>
+        <Link to="/usuarios">Usuários</Link>
       </Menu.Item>
-      <Menu.Item
-        key="history"
-        icon={<HistoryOutlined style={{ fontSize: "23px" }} />}
-      >
-        <Link to="/historico">
-        Histórico
-        </Link>
+      <Menu.Item key="historico" icon={<HistoryOutlined style={{ fontSize: "23px" }} />}>
+        <Link to="/historico">Histórico</Link>
       </Menu.Item>
-      <Menu.Item
-        key="logOut"
-        icon={<LogoutOutlined style={{ fontSize: "23px" }} />}
-      >
-        <Link to="/">
-        Sair
-        </Link>
+      <Menu.Item key="logout" icon={<LogoutOutlined style={{ fontSize: "23px" }} />}>
+        <Link to="/">Sair</Link>
       </Menu.Item>
     </Menu>
   );
