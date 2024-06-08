@@ -8,6 +8,8 @@ import {
   LogoutOutlined,
   HistoryOutlined,
 } from "@ant-design/icons";
+import { Link } from "react-router-dom";
+
 
 const MenuList = () => {
   return (
@@ -21,37 +23,49 @@ const MenuList = () => {
         key="home"
         icon={<HomeOutlined style={{ fontSize: "23px" }} />}
       >
+        <Link to="/dashboard">
         Home
+        </Link>
       </Menu.Item>
       <Menu.Item
         key="stock"
         icon={<InboxOutlined style={{ fontSize: "23px" }} />}
       >
+        <Link to="/estoques">
         Estoques
+        </Link>
       </Menu.Item>
       <Menu.Item
         key="itens"
         icon={<PlusOutlined style={{ fontSize: "23px" }} />}
       >
+        <Link to="/itens">
         Itens
+        </Link>
       </Menu.Item>
       <Menu.Item
         key="users"
         icon={<UsergroupAddOutlined style={{ fontSize: "23px" }} />}
       >
+        <Link to="/usuarios">
         Usuários
+        </Link>
       </Menu.Item>
       <Menu.Item
         key="history"
         icon={<HistoryOutlined style={{ fontSize: "23px" }} />}
       >
+        <Link to="/historico">
         Histórico
+        </Link>
       </Menu.Item>
       <Menu.Item
         key="logOut"
         icon={<LogoutOutlined style={{ fontSize: "23px" }} />}
       >
+        <Link to="/">
         Sair
+        </Link>
       </Menu.Item>
     </Menu>
   );

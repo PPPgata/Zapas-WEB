@@ -24,8 +24,6 @@ const SideBar = () => {
         >
           {collapsed ? <SmallLogo /> : <Logo className={st.logo} />}
           <MenuList />
-          {/* Adicionar o elemento da faixa */}
-          {!collapsed && <div className={st.rightStripe}></div>}
         </Sider>
       </Layout>
     </>
