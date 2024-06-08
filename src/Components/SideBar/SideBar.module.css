@@ -1,5 +1,8 @@
-.sidebar {
-  flex-direction: column;
-  color: #fff;
-  background-color: #0081A7;
+.rightStripe {
+  position: absolute;
+  top: 0;
+  right: -5px; /* ajuste conforme necessário */
+  height: 100%;
+  width: 5px;
+  background-color: #ffffff; /* cor da faixa */
 }
