@@ -3,8 +3,6 @@ import { useEffect } from "react";
 
 export const metadata = {
   title: "Zapas",
-  description: "Zapas é uma plataforma de doações de roupas",
-  image: "https://zapas.vercel.app/assets/img/LogoZ.svg",
 };
 
 function App() {
