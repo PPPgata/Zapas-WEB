@@ -1,8 +1,18 @@
 const express = require("express");
 const app = express();
+const mysql = require("mysql");
+
+const db = mysql.createPool({
+  host: "localhost",
+  user: "root",
+  password: "password",
+  database: "zapasbd",
+});
 
 app.get("/", (req, res) => {
-  res.send("Hello Word");
+  db.query(
+    "INSERT INTO empresas (email, password, enterprise_name, industry, cnpj) VALUES ('rafaelleivas@gmail.com', '123456', 'Zapas', 'Tecnologia', '12312312312312')"
+  );
 });
 
 app.listen(3001, () => {
