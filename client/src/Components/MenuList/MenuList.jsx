@@ -21,22 +21,40 @@ const MenuList = () => {
       className={st.menu_bar}
       defaultSelectedKeys={[path]}
     >
-      <Menu.Item key="dashboard" icon={<HomeOutlined style={{ fontSize: "23px" }} />}>
+      <Menu.Item
+        key="dashboard"
+        icon={<HomeOutlined style={{ fontSize: "23px" }} />}
+      >
         <Link to="/dashboard">Home</Link>
       </Menu.Item>
-      <Menu.Item key="estoques" icon={<InboxOutlined style={{ fontSize: "23px" }} />}>
+      <Menu.Item
+        key="estoques"
+        icon={<InboxOutlined style={{ fontSize: "23px" }} />}
+      >
         <Link to="/estoques">Estoques</Link>
       </Menu.Item>
-      <Menu.Item key="itens" icon={<PlusOutlined style={{ fontSize: "23px" }} />}>
+      <Menu.Item
+        key="itens"
+        icon={<PlusOutlined style={{ fontSize: "23px" }} />}
+      >
         <Link to="/itens">Itens</Link>
       </Menu.Item>
-      <Menu.Item key="usuarios" icon={<UsergroupAddOutlined style={{ fontSize: "23px" }} />}>
+      <Menu.Item
+        key="usuarios"
+        icon={<UsergroupAddOutlined style={{ fontSize: "23px" }} />}
+      >
         <Link to="/usuarios">Usuários</Link>
       </Menu.Item>
-      <Menu.Item key="historico" icon={<HistoryOutlined style={{ fontSize: "23px" }} />}>
+      <Menu.Item
+        key="historico"
+        icon={<HistoryOutlined style={{ fontSize: "23px" }} />}
+      >
         <Link to="/historico">Histórico</Link>
       </Menu.Item>
-      <Menu.Item key="logout" icon={<LogoutOutlined style={{ fontSize: "23px" }} />}>
+      <Menu.Item
+        key="logout"
+        icon={<LogoutOutlined style={{ fontSize: "23px" }} />}
+      >
         <Link to="/">Sair</Link>
       </Menu.Item>
     </Menu>

@@ -1,0 +1,12 @@
+.window {
+  display: flex;
+}
+
+.container {
+  width: 100%;
+  
+}
+
+.modal .ant-modal-content {
+  background-color: red;
+}

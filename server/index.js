@@ -5,8 +5,8 @@ const mysql = require("mysql");
 const db = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "password",
-  database: "zapasbd",
+  password: "root",
+  database: "zapas",
 });
 
 app.get("/", (req, res) => {
