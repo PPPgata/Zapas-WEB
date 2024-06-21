@@ -1,4 +1,6 @@
 import React from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import st from "./Login.module.css";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
@@ -7,13 +9,21 @@ import { Link } from "react-router-dom";
 import Axios from "axios";
 
 const Login = () => {
+
+  const [loginError, setLoginError] = useState('');
+  const navigate = useNavigate();
+
   const handleClickLogin = (values) => {
     Axios.post("http://localhost:3001/login", {
       email: values.email,
       senha: values.password,
     }).then((response) => {
       console.log(response);
-    
+      if (response.data.msg === 'Login realizado com sucesso!') {
+        navigate('/dashboard'); 
+      }else {
+        setLoginError(response.data.msg);
+      }
     })
   };
 
