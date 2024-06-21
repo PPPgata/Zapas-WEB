@@ -4,12 +4,23 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import teamWork from "../../assets/img/Team_work.png";
+import Axios from "axios";
 
 const Cadastro = () => {
-  const navigate = useNavigate();
-
+  
+  // const navigate = useNavigate();
+  
   const handleClickRegister = (values) => {
-    console.log(values);
+    Axios.post("http://localhost:3001/register", {
+      email: values.email,
+      senha: values.password,
+      nome: values.enterpriseName,
+      segmento: values.enterpriseSegment,
+      cnpj: values.cnpj,
+    }).then((response) => {
+      console.log(response)
+    })
+    //   console.log(values);
     // navigate("/dashboard");
   };
 
