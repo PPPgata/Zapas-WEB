@@ -3,6 +3,9 @@ const app = express();
 const mysql = require("mysql");
 const cors = require("cors");
 
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
+
 const db = mysql.createPool({
   host: "localhost",
   user: "root",
@@ -25,17 +28,19 @@ app.post("/register", (req, res) => {
       res.send(err);
     }
     if (result.length == 0) {
-      db.query(
-        "INSERT INTO empresas (email, senha, nome, segmento, cnpj) VALUES (?, ?, ?, ?, ?)",
-        [email, senha, nome, segmento, cnpj],
-        (err, response) => {
-          if (err) {
-            res.send(err);
-          }
+      bcrypt.hash(senha, saltRounds, (err, hash) => {
+        db.query(
+          "INSERT INTO empresas (email, senha, nome, segmento, cnpj) VALUES (?, ?, ?, ?, ?)",
+          [email, hash, nome, segmento, cnpj],
+          (err, response) => {
+            if (err) {
+              res.send(err);
+            }
 
-          res.send({ msg: "Cadastro realizado com sucesso!" });
-        }
-      );
+            res.send({ msg: "Cadastro realizado com sucesso!" });
+          }
+        );
+      });
     } else {
       res.send({ msg: "Email já cadastrado!" });
     }
@@ -46,9 +51,9 @@ app.post("/login", (req, res) => {
   const { email, senha } = req.body;
 
   db.query(
-    "SELECT * FROM empresas WHERE email = ? AND senha = ?",
-    [email, senha],
-    
+    "SELECT * FROM empresas WHERE email = ?",
+    [email],
+
     (err, result) => {
       if (err) {
         console.error("Erro na consulta SQL:", err);
@@ -57,9 +62,15 @@ app.post("/login", (req, res) => {
       }
 
       if (result.length > 0) {
-        res.send({ msg: "Login realizado com sucesso!" });
+        bcrypt.compare(senha, result[0].senha, (error, result) => {
+          if (result) {
+            res.send({ msg: "Login realizado com sucesso!" });
+          } else {
+            res.send({ msg: "A senha está incorreta!" });
+          }
+        });
       } else {
-        res.send({ msg: "Email ou senha incorretos!" });
+        res.send({ msg: "O email esta incorreta!" });
       }
     }
   );
