@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import SideBar from "../../Components/SideBar/SideBar";
 import st from "./Itens.module.css";
-import { Input, Space, Button, Modal } from "antd";
+import { Input, Space, Button, Modal, Flex } from "antd";
 
 const { Search } = Input;
 
@@ -23,7 +23,12 @@ const Itens = () => {
             />
           </Space>
 
-          <Button type="primary" onClick={() => setOpen(true)}>
+          <Button
+            className={st.buttonModal}
+            type="primary"
+            onClick={() => setOpen(true)}
+            
+          >
             Adicionar Item
           </Button>
           <Modal
@@ -42,6 +47,18 @@ const Itens = () => {
           </Modal>
         </div>
       </div>
+
+      <Flex
+        vertical
+        gap="small"
+        style={{
+          width: "100%",
+        }}
+      >
+        <Button type="primary" block>
+          Primary
+        </Button>
+      </Flex>
     </div>
   );
 };
