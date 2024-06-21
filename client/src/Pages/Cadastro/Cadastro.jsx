@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import st from "../Cadastro/Cadastro.module.css";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
@@ -7,8 +8,9 @@ import teamWork from "../../assets/img/Team_work.png";
 import Axios from "axios";
 
 const Cadastro = () => {
-  
-  // const navigate = useNavigate();
+
+  const [CadastroError, setCadastroError] = useState('');
+  const navigate = useNavigate();
   
   const handleClickRegister = (values) => {
     Axios.post("http://localhost:3001/register", {
@@ -18,10 +20,14 @@ const Cadastro = () => {
       segmento: values.enterpriseSegment,
       cnpj: values.cnpj,
     }).then((response) => {
-      console.log(response)
+      console.log(response);
+      if (response.data.msg === 'Cadastro realizado com sucesso!') {
+        navigate('/login'); 
+      }else {
+        setCadastroError(response.data.msg); // Mostrar mensagem de erro
+      }
+
     })
-    //   console.log(values);
-    // navigate("/dashboard");
   };
 
   const validationRegister = yup.object().shape({
