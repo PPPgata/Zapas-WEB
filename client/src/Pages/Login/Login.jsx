@@ -4,9 +4,18 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import teamWork from "../../assets/img/Team_work.png";
 import { Link } from "react-router-dom";
+import Axios from "axios";
 
 const Login = () => {
-  const handleClickLogin = (values) => console.log(values);
+  const handleClickLogin = (values) => {
+    Axios.post("http://localhost:3001/login", {
+      email: values.email,
+      senha: values.password,
+    }).then((response) => {
+      console.log(response);
+    
+    })
+  };
 
   const validationLogin = yup.object().shape({
     email: yup
@@ -73,9 +82,9 @@ const Login = () => {
                 </p>
               </div>
               <button className={st.button} type="submit">
-                <Link className={st.linkButton} to={"/dashboard"}>
+                {/* <Link className={st.linkButton}> */}
                   Login
-                </Link>
+                {/* </Link> */}
               </button>
             </Form>
           </Formik>
