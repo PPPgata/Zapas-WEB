@@ -26,6 +26,7 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
+  gap: 20px;
 }
 .signUp_form {
   width: 60%;
@@ -132,4 +133,11 @@
 
 .form_field[type="number"] {
   -moz-appearance: textfield;
+}
+
+.headerForm{
+  display: flex;
+  justify-content: space-between;
+  width: 58%;
+  align-items: center;
 }

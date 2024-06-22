@@ -6,9 +6,10 @@ import * as yup from "yup";
 import teamWork from "../../assets/img/Team_work.png";
 import { Link } from "react-router-dom";
 import Axios from "axios";
+import ButtonBack from "../../Components/ButtonBack/ButtonBack";
 
 const Login = () => {
-  const [loginError, setLoginError] = useState('');
+  const [loginError, setLoginError] = useState("");
   const navigate = useNavigate();
 
   const handleClickLogin = (values) => {
@@ -16,19 +17,19 @@ const Login = () => {
       email: values.email,
       senha: values.password,
     })
-    .then((response) => {
-      console.log(response);
-      if (response.data.msg === 'Login realizado com sucesso!') {
-        localStorage.setItem('token', response.data.token);
-        navigate('/dashboard'); 
-      } else {
-        setLoginError(response.data.msg);
-      }
-    })
-    .catch((error) => {
-      console.error('Erro na requisição:', error);
-      setLoginError('Erro ao realizar login. Tente novamente mais tarde.');
-    });
+      .then((response) => {
+        console.log(response);
+        if (response.data.msg === "Login realizado com sucesso!") {
+          localStorage.setItem("token", response.data.token);
+          navigate("/dashboard");
+        } else {
+          setLoginError(response.data.msg);
+        }
+      })
+      .catch((error) => {
+        console.error("Erro na requisição:", error);
+        setLoginError("Erro ao realizar login. Tente novamente mais tarde.");
+      });
   };
 
   const validationLogin = yup.object().shape({
@@ -49,7 +50,10 @@ const Login = () => {
         <img src={teamWork} alt="Pessoas carregando blocos de brinquedo" />
       </div>
       <div className={st.form}>
-        <h1>Realize seu login</h1>
+        <div className={st.headerForm}>
+          <ButtonBack />
+          <h1>Login</h1>
+        </div>
         <Formik
           initialValues={{ email: "", password: "" }}
           onSubmit={handleClickLogin}
@@ -60,7 +64,9 @@ const Login = () => {
               <div className="login-group">
                 <Field
                   name="email"
-                  className={`${st.form_field} ${errors.email && touched.email ? st.form_field_error : ''}`}
+                  className={`${st.form_field} ${
+                    errors.email && touched.email ? st.form_field_error : ""
+                  }`}
                   placeholder="Email"
                 />
                 <ErrorMessage
@@ -72,7 +78,11 @@ const Login = () => {
               <div className="login-group">
                 <Field
                   name="password"
-                  className={`${st.form_field} ${errors.password && touched.password ? st.form_field_error : ''}`}
+                  className={`${st.form_field} ${
+                    errors.password && touched.password
+                      ? st.form_field_error
+                      : ""
+                  }`}
                   placeholder="Senha"
                   type="password"
                 />
@@ -82,7 +92,9 @@ const Login = () => {
                   className={st.form_error}
                 />
               </div>
-              {loginError && <div className={st.error_message}>{loginError}</div>}
+              {loginError && (
+                <div className={st.error_message}>{loginError}</div>
+              )}
               <div className={st.links}>
                 <p>
                   Não tem cadastro?{" "}

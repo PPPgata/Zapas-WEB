@@ -102,3 +102,10 @@
   margin-bottom: 10px;
   text-align: right;
 }
+
+.headerForm{
+  display: flex;
+  justify-content: space-between;
+  width: 49%;
+  align-items: center;
+}

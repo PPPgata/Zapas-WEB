@@ -7,9 +7,11 @@ import { Link, useNavigate } from "react-router-dom";
 import teamWork from "../../assets/img/Team_work.png";
 import Axios from "axios";
 import InputMask from "react-input-mask";
+import ButtonBack from "../../Components/ButtonBack/ButtonBack";
+import { Divider } from "antd";
 
 const Cadastro = () => {
-  const [CadastroError, setCadastroError] = useState('');
+  const [CadastroError, setCadastroError] = useState("");
   const [formSubmitted, setFormSubmitted] = useState(false);
   const navigate = useNavigate();
 
@@ -19,11 +21,11 @@ const Cadastro = () => {
       senha: values.password,
       nome: values.enterpriseName,
       segmento: values.enterpriseSegment,
-      cnpj: values.cnpj.replace(/[^\d]/g, ''),
+      cnpj: values.cnpj.replace(/[^\d]/g, ""),
     }).then((response) => {
       console.log(response);
-      if (response.data.msg === 'Cadastro realizado com sucesso!') {
-        navigate('/login'); 
+      if (response.data.msg === "Cadastro realizado com sucesso!") {
+        navigate("/login");
       } else {
         setCadastroError(response.data.msg);
       }
@@ -55,7 +57,10 @@ const Cadastro = () => {
   return (
     <div className={st.content}>
       <div className={st.form}>
-        <h1>Cadastre-se</h1>
+        <div className={st.headerForm}>
+          <ButtonBack />
+          <h1>Cadastre-se</h1>
+        </div>
         <Formik
           initialValues={{
             email: "",
@@ -73,7 +78,9 @@ const Cadastro = () => {
               <div className={st.register_form}>
                 <Field
                   name="email"
-                  className={`${st.form_field} ${touched.email && errors.email ? st.error : ""}`}
+                  className={`${st.form_field} ${
+                    touched.email && errors.email ? st.error : ""
+                  }`}
                   placeholder="Email"
                 />
                 {touched.email && errors.email && (
@@ -84,7 +91,9 @@ const Cadastro = () => {
                 <div className={st.register_form}>
                   <Field
                     name="password"
-                    className={`${st.form_field} ${touched.password && errors.password ? st.error : ""}`}
+                    className={`${st.form_field} ${
+                      touched.password && errors.password ? st.error : ""
+                    }`}
                     placeholder="Senha"
                     type="password"
                   />
@@ -95,19 +104,29 @@ const Cadastro = () => {
                 <div className={st.register_form}>
                   <Field
                     name="confirmPassword"
-                    className={`${st.form_field} ${touched.confirmPassword && errors.confirmPassword ? st.error : ""}`}
+                    className={`${st.form_field} ${
+                      touched.confirmPassword && errors.confirmPassword
+                        ? st.error
+                        : ""
+                    }`}
                     placeholder="Confirme sua senha"
                     type="password"
                   />
                   {touched.confirmPassword && errors.confirmPassword && (
-                    <span className={st.form_error}>{errors.confirmPassword}</span>
+                    <span className={st.form_error}>
+                      {errors.confirmPassword}
+                    </span>
                   )}
                 </div>
               </div>
               <div className={st.register_form}>
                 <Field
                   name="enterpriseName"
-                  className={`${st.form_field} ${touched.enterpriseName && errors.enterpriseName ? st.error : ""}`}
+                  className={`${st.form_field} ${
+                    touched.enterpriseName && errors.enterpriseName
+                      ? st.error
+                      : ""
+                  }`}
                   placeholder="Nome da sua empresa"
                 />
                 {touched.enterpriseName && errors.enterpriseName && (
@@ -118,11 +137,17 @@ const Cadastro = () => {
                 <div className={st.register_form}>
                   <Field
                     name="enterpriseSegment"
-                    className={`${st.form_field} ${touched.enterpriseSegment && errors.enterpriseSegment ? st.error : ""}`}
+                    className={`${st.form_field} ${
+                      touched.enterpriseSegment && errors.enterpriseSegment
+                        ? st.error
+                        : ""
+                    }`}
                     placeholder="Segmento"
                   />
                   {touched.enterpriseSegment && errors.enterpriseSegment && (
-                    <span className={st.form_error}>{errors.enterpriseSegment}</span>
+                    <span className={st.form_error}>
+                      {errors.enterpriseSegment}
+                    </span>
                   )}
                 </div>
                 <div className={st.register_form}>
@@ -131,7 +156,9 @@ const Cadastro = () => {
                       <InputMask
                         {...field}
                         mask="99.999.999/9999-99"
-                        className={`${st.form_field} ${touched.cnpj && errors.cnpj ? st.error : ""}`}
+                        className={`${st.form_field} ${
+                          touched.cnpj && errors.cnpj ? st.error : ""
+                        }`}
                         placeholder="CNPJ"
                       />
                     )}
