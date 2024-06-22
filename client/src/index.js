@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createContext } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -7,10 +7,11 @@ import Login from "./Pages/Login/Login";
 import Cadastro from "./Pages/Cadastro/Cadastro";
 import Error from "./Pages/Error/Error";
 import Dashboard from "./Pages/Dashboard/Dashboard";
-import Stock from './Pages/Stock/Stock';
-import Itens from './Pages/Itens/Itens';
-import Users from './Pages/Users/Users';
-import History from './Pages/History/History';
+import Stock from "./Pages/Stock/Stock";
+import Itens from "./Pages/Itens/Itens";
+import Users from "./Pages/Users/Users";
+import History from "./Pages/History/History";
+import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -21,12 +22,46 @@ const router = createBrowserRouter([
       { path: "/", element: <Home /> },
       { path: "/cadastro", element: <Cadastro /> },
       { path: "/login", element: <Login /> },
-      { path: "/dashboard", element: <Dashboard /> },
-      { path: "/estoques", element: <Stock />},
-      { path: "/itens", element: <Itens />},
-      { path: "/usuarios", element: <Users />},
-      { path: "/historico", element: <History />},
-
+      {
+        path: "/dashboard",
+        element: (
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/estoques",
+        element: (
+          <ProtectedRoute>
+            <Stock />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/itens",
+        element: (
+          <ProtectedRoute>
+            <Itens />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/usuarios",
+        element: (
+          <ProtectedRoute>
+            <Users />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/historico",
+        element: (
+          <ProtectedRoute>
+            <History />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
 ]);

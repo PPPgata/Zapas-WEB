@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const mysql = require("mysql");
 const cors = require("cors");
+const jwt = require("jsonwebtoken");
+const SECRET = "secretkey";
 
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
@@ -57,20 +59,22 @@ app.post("/login", (req, res) => {
     (err, result) => {
       if (err) {
         console.error("Erro na consulta SQL:", err);
-        res.status(500).send(err); // Erro interno do servidor
+        res.status(500).send(err);
         return;
       }
 
       if (result.length > 0) {
         bcrypt.compare(senha, result[0].senha, (error, result) => {
           if (result) {
+            const token = jwt.sign({ email: email }, SECRET, { expiresIn: "1h" });
+            return res.json({auth: true, token})
             res.send({ msg: "Login realizado com sucesso!" });
           } else {
-            res.send({ msg: "A senha está incorreta!" });
+            res.send({ msg: "A senha está incorreto!" });
           }
         });
       } else {
-        res.send({ msg: "O email esta incorreta!" });
+        res.send({ msg: "O email esta incorreto!" });
       }
     }
   );
