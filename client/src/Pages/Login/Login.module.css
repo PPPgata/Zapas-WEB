@@ -95,3 +95,10 @@
 .link:hover {
   text-decoration: underline;
 }
+
+.error_message {
+  color: #ff1212;
+  font-weight: 500;
+  margin-bottom: 10px;
+  text-align: right;
+}
