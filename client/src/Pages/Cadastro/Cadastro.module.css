@@ -117,3 +117,19 @@
 .register {
   margin: 10px 0;
 }
+
+.form_field:focus {
+  border-color: #66afe9;
+  outline: none;
+  box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+.form_field::-webkit-outer-spin-button,
+.form_field::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.form_field[type="number"] {
+  -moz-appearance: textfield;
+}
