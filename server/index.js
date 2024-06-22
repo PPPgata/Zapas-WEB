@@ -67,7 +67,6 @@ app.post("/login", (req, res) => {
         bcrypt.compare(senha, result[0].senha, (error, result) => {
           if (result) {
             const token = jwt.sign({ email: email }, SECRET, { expiresIn: "1h" });
-            return res.json({auth: true, token})
             res.send({ msg: "Login realizado com sucesso!" });
           } else {
             res.send({ msg: "A senha está incorreto!" });

@@ -8,11 +8,17 @@ import {
   LogoutOutlined,
   HistoryOutlined,
 } from "@ant-design/icons";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const MenuList = () => {
   const location = useLocation();
   const path = location.pathname.split("/")[1];
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
 
   return (
     <Menu
@@ -54,8 +60,9 @@ const MenuList = () => {
       <Menu.Item
         key="logout"
         icon={<LogoutOutlined style={{ fontSize: "23px" }} />}
+        onClick={handleLogout} // Chamada para a função de logout
       >
-        <Link to="/">Sair</Link>
+        <span>Sair</span>
       </Menu.Item>
     </Menu>
   );
