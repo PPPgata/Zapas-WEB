@@ -20,6 +20,7 @@ const Login = () => {
     }).then((response) => {
       console.log(response);
       if (response.data.msg === 'Login realizado com sucesso!') {
+        localStorage.setItem('token', response.data.token);
         navigate('/dashboard'); 
       }else {
         setLoginError(response.data.msg);
