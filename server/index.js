@@ -64,10 +64,17 @@ app.post("/login", (req, res) => {
       }
 
       if (result.length > 0) {
-        bcrypt.compare(senha, result[0].senha, (error, result) => {
-          if (result) {
-            const token = jwt.sign({ email: email }, SECRET, { expiresIn: "1h" });
-            res.send({ msg: "Login realizado com sucesso!" });
+        bcrypt.compare(senha, result[0].senha, (error, response) => {
+          if (response) {
+            const id_empresa = result[0].idempresas;
+
+            const token = jwt.sign(
+              { email: email, id_empresa: id_empresa },
+              SECRET,
+              { expiresIn: "1h" }
+            );
+            console.log(id_empresa);
+            res.send({ msg: "Login realizado com sucesso!", token: token });
           } else {
             res.send({ msg: "A senha está incorreto!" });
           }
@@ -84,38 +91,55 @@ app.post("/estoques", (req, res) => {
   const space = req.body.space;
   const category = req.body.category;
   const localization = req.body.localization;
-  const empresa_id = 16;
+  const token = req.body.token;
 
-  db.query("SELECT * FROM estoques WHERE name = ?", [name], (err, results) => {
+  if (!token) {
+    res.status(401).send({ msg: "Token não informado" });
+    return;
+  }
+
+  jwt.verify(token, SECRET, (err, decoded) => {
     if (err) {
-      console.log(err);
-      res.status(500).send({ msg: "Erro ao buscar estoques" });
-    } else if (results.length > 0) {
-      res.send({ msg: "Estoque já cadastrado!" });
-    } else {
-      db.query(
-        "INSERT INTO estoques (name, space, category, localization, empresa_id) VALUES (?, ?, ?, ?, ?)",
-        [name, space, category, localization, empresa_id],
-        (err, insertResult) => {
-          if (err) {
-            console.log(err);
-            res.status(500).send({ msg: "Erro ao inserir estoque" });
-          } else {
-            db.query("SELECT * FROM estoques", (err, allEstoques) => {
+      res.status(401).send({ msg: "Token inválido" });
+      return;
+    }
+
+    db.query(
+      "SELECT * FROM estoques WHERE name = ?",
+      [name],
+      (err, results) => {
+        if (err) {
+          console.log(err);
+          res.status(500).send({ msg: "Erro ao buscar estoques" });
+        } else if (results.length > 0) {
+          res.send({ msg: "Estoque já cadastrado!" });
+        } else {
+          db.query(
+            "INSERT INTO estoques (name, space, category, localization, empresa_id) VALUES (?, ?, ?, ?, ?)",
+            [name, space, category, localization, decoded.id_empresa],
+            (err, insertResult) => {
               if (err) {
                 console.log(err);
-                res.status(500).send({ msg: "Erro ao buscar todos os estoques" });
+                res.status(500).send({ msg: "Erro ao inserir estoque" });
               } else {
-                res.send(allEstoques);
+                db.query("SELECT * FROM estoques", (err, allEstoques) => {
+                  if (err) {
+                    console.log(err);
+                    res
+                      .status(500)
+                      .send({ msg: "Erro ao buscar todos os estoques" });
+                  } else {
+                    res.send(allEstoques);
+                  }
+                });
               }
-            });
-          }
+            }
+          );
         }
-      );
-    }
+      }
+    );
   });
 });
-
 
 app.listen(3001, () => {
   console.log("Rodando na porta 3001");

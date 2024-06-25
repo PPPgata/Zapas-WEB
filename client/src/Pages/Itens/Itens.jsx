@@ -55,9 +55,7 @@ const Itens = () => {
           width: "100%",
         }}
       >
-        <Button type="primary" block>
-          Primary
-        </Button>
+
       </Flex>
     </div>
   );

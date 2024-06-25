@@ -10,15 +10,16 @@ const Stock = () => {
   const [open, setOpen] = useState(false);
   const [formValues, setFormValues] = useState({ name: "", space: "", category: "", localization: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const token = localStorage.getItem('token');
 
   const handleClickStock = (values, resetForm) => {
     setIsSubmitting(true);
-  
     Axios.post("http://localhost:3001/estoques", {
       name: values.name,
       space: values.space,
       category: values.category,
       localization: values.localization,
+      token: token
     })
       .then((response) => {
         console.log(response);
