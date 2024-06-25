@@ -79,6 +79,44 @@ app.post("/login", (req, res) => {
   );
 });
 
+app.post("/estoques", (req, res) => {
+  const name = req.body.name;
+  const space = req.body.space;
+  const category = req.body.category;
+  const localization = req.body.localization;
+  const empresa_id = 16;
+
+  db.query("SELECT * FROM estoques WHERE name = ?", [name], (err, results) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send({ msg: "Erro ao buscar estoques" });
+    } else if (results.length > 0) {
+      res.send({ msg: "Estoque já cadastrado!" });
+    } else {
+      db.query(
+        "INSERT INTO estoques (name, space, category, localization, empresa_id) VALUES (?, ?, ?, ?, ?)",
+        [name, space, category, localization, empresa_id],
+        (err, insertResult) => {
+          if (err) {
+            console.log(err);
+            res.status(500).send({ msg: "Erro ao inserir estoque" });
+          } else {
+            db.query("SELECT * FROM estoques", (err, allEstoques) => {
+              if (err) {
+                console.log(err);
+                res.status(500).send({ msg: "Erro ao buscar todos os estoques" });
+              } else {
+                res.send(allEstoques);
+              }
+            });
+          }
+        }
+      );
+    }
+  });
+});
+
+
 app.listen(3001, () => {
   console.log("Rodando na porta 3001");
 });
