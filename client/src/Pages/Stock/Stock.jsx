@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SideBar from "../../Components/SideBar/SideBar";
 import st from "./Stock.module.css";
 import { Button, Modal } from "antd";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Axios from "axios";
 import * as yup from "yup";
+import Card from "../../Components/cards/Card";
 
 const Stock = () => {
   const [open, setOpen] = useState(false);
   const [formValues, setFormValues] = useState({ name: "", space: "", category: "", localization: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const token = localStorage.getItem('token');
+  const [listCards, setListCards] = useState();
+
 
   const handleClickStock = (values, resetForm) => {
     setIsSubmitting(true);
@@ -40,6 +43,18 @@ const Stock = () => {
     category: yup.string().required("Este campo é obrigatório"),
     localization: yup.string().required("Este campo é obrigatório"),
   });
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    Axios.get("http://localhost:3001/getCards", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then((response) => {
+      setListCards(response.data);
+    });
+  }, []);
 
   return (
     <>
@@ -158,6 +173,11 @@ const Stock = () => {
               )}
             </Formik>
           </Modal>
+
+          { typeof listCards !== 'undefined' && 
+          listCards.map((value) => {
+            return <Card />
+          })}
         </div>
       </div>
     </>
