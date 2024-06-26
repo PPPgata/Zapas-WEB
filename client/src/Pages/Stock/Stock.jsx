@@ -1,19 +1,27 @@
 import React, { useState, useEffect } from "react";
 import SideBar from "../../Components/SideBar/SideBar";
 import st from "./Stock.module.css";
-import { Button, Modal } from "antd";
+import { Button, Modal, Input } from "antd";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Axios from "axios";
 import * as yup from "yup";
 import Card from "../../Components/cards/Card";
+import { PlusOutlined } from "@ant-design/icons";
+import type { SearchProps } from 'antd/es/input/Search';
+
+const { Search } = Input;
 
 const Stock = () => {
   const [open, setOpen] = useState(false);
-  const [formValues, setFormValues] = useState({ name: "", space: "", category: "", localization: "" });
+  const [formValues, setFormValues] = useState({
+    name: "",
+    space: "",
+    category: "",
+    localization: "",
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   const [listCards, setListCards] = useState();
-
 
   const handleClickStock = (values, resetForm) => {
     setIsSubmitting(true);
@@ -22,7 +30,7 @@ const Stock = () => {
       space: values.space,
       category: values.category,
       localization: values.localization,
-      token: token
+      token: token,
     })
       .then((response) => {
         console.log(response);
@@ -49,135 +57,187 @@ const Stock = () => {
 
     Axios.get("http://localhost:3001/getCards", {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     }).then((response) => {
       setListCards(response.data);
     });
-  }, []);
+  }, [handleClickStock]);
 
   return (
     <>
       <div className={st.window}>
         <SideBar />
         <div className={st.container}>
-          <Button
-            className={st.buttonModal}
-            type="primary"
-            onClick={() => {
-              setFormValues({ name: "", space: "", category: "", localization: "" });
-              setOpen(true);
-            }}
-          >
-            Adicionar Item
-          </Button>
-          <Modal
-            className={st.modal}
-            title="Criando seu estoque"
-            centered
-            open={open}
-            onOk={() => {
-              validationStock
-                .validate(formValues)
-                .then((valid) => {
-                  if (valid) {
-                    handleClickStock(formValues, () => {});
-                  }
-                })
-                .catch((err) => {
-                  console.error(err);
-                });
-            }}
-            onCancel={() => setOpen(false)}
-            confirmLoading={isSubmitting}
-            width={1000}
-            style={{ backgroundColor: "#263238" }}
-          >
-            <Formik
-              initialValues={formValues}
-              enableReinitialize
-              onSubmit={(values, { resetForm }) => {
+
+          <div className={st.containerStock}>
+
+          <div className={st.header}>
+          <h1 className={st.title}>Estoques disponíveis</h1>
+          <Search placeholder="input search text" style={{ width: 200 }} />
+          </div>
+          <div className={st.listCards}>
+            <Modal
+              className={st.modal}
+              title="Criando seu estoque"
+              centered
+              open={open}
+              onOk={() => {
                 validationStock
-                  .validate(values)
+                  .validate(formValues)
                   .then((valid) => {
                     if (valid) {
-                      handleClickStock(values, resetForm);
+                      handleClickStock(formValues, () => {});
                     }
                   })
                   .catch((err) => {
                     console.error(err);
                   });
               }}
-              validationSchema={validationStock}
+              onCancel={() => setOpen(false)}
+              confirmLoading={isSubmitting}
+              width={1000}
+              style={{ backgroundColor: "#263238" }}
             >
-              {({ errors, touched, handleChange, handleBlur, values }) => (
-                <Form className={st.login_form}>
-                  <div className={st.login_group}>
-                    <Field
-                      name="name"
-                      placeholder="Nome do estoque"
-                      className={`${st.form_field} ${errors.name && touched.name ? st.form_field_error : ""}`}
-                      onChange={(e) => {
-                        handleChange(e);
-                        setFormValues({ ...values, name: e.target.value });
-                      }}
-                      onBlur={handleBlur}
-                      value={values.name}
-                    />
-                    <ErrorMessage name="name" component="span" className={st.form_error} />
-                  </div>
-                  <div className={st.login_group}>
-                    <Field
-                      name="space"
-                      placeholder="Espaço disponível"
-                      type="number"
-                      className={`${st.form_field} ${errors.space && touched.space ? st.form_field_error : ""}`}
-                      onChange={(e) => {
-                        handleChange(e);
-                        setFormValues({ ...values, space: e.target.value });
-                      }}
-                      onBlur={handleBlur}
-                      value={values.space}
-                    />
-                    <ErrorMessage name="space" component="span" className={st.form_error} />
-                  </div>
-                  <div className={st.login_group}>
-                    <Field
-                      name="category"
-                      placeholder="Categoria"
-                      className={`${st.form_field} ${errors.category && touched.category ? st.form_field_error : ""}`}
-                      onChange={(e) => {
-                        handleChange(e);
-                        setFormValues({ ...values, category: e.target.value });
-                      }}
-                      onBlur={handleBlur}
-                      value={values.category}
-                    />
-                    <ErrorMessage name="category" component="span" className={st.form_error} />
-                  </div>
-                  <div className={st.login_group}>
-                    <Field
-                      name="localization"
-                      placeholder="Localização"
-                      className={`${st.form_field} ${errors.localization && touched.localization ? st.form_field_error : ""}`}
-                      onChange={(e) => {
-                        handleChange(e);
-                        setFormValues({ ...values, localization: e.target.value });
-                      }}
-                      onBlur={handleBlur}
-                      value={values.localization}
-                    />
-                    <ErrorMessage name="localization" component="span" className={st.form_error} />
-                  </div>
-                </Form>
-              )}
-            </Formik>
-          </Modal>
+              <Formik
+                initialValues={formValues}
+                enableReinitialize
+                onSubmit={(values, { resetForm }) => {
+                  validationStock
+                    .validate(values)
+                    .then((valid) => {
+                      if (valid) {
+                        handleClickStock(values, resetForm);
+                      }
+                    })
+                    .catch((err) => {
+                      console.error(err);
+                    });
+                }}
+                validationSchema={validationStock}
+              >
+                {({ errors, touched, handleChange, handleBlur, values }) => (
+                  <Form className={st.login_form}>
+                    <div className={st.login_group}>
+                      <Field
+                        name="name"
+                        placeholder="Nome do estoque"
+                        className={`${st.form_field} ${
+                          errors.name && touched.name ? st.form_field_error : ""
+                        }`}
+                        onChange={(e) => {
+                          handleChange(e);
+                          setFormValues({ ...values, name: e.target.value });
+                        }}
+                        onBlur={handleBlur}
+                        value={values.name}
+                      />
+                      <ErrorMessage
+                        name="name"
+                        component="span"
+                        className={st.form_error}
+                      />
+                    </div>
+                    <div className={st.login_group}>
+                      <Field
+                        name="space"
+                        placeholder="Espaço disponível"
+                        type="number"
+                        className={`${st.form_field} ${
+                          errors.space && touched.space
+                            ? st.form_field_error
+                            : ""
+                        }`}
+                        onChange={(e) => {
+                          handleChange(e);
+                          setFormValues({ ...values, space: e.target.value });
+                        }}
+                        onBlur={handleBlur}
+                        value={values.space}
+                      />
+                      <ErrorMessage
+                        name="space"
+                        component="span"
+                        className={st.form_error}
+                      />
+                    </div>
+                    <div className={st.login_group}>
+                      <Field
+                        name="category"
+                        placeholder="Categoria"
+                        className={`${st.form_field} ${
+                          errors.category && touched.category
+                            ? st.form_field_error
+                            : ""
+                        }`}
+                        onChange={(e) => {
+                          handleChange(e);
+                          setFormValues({
+                            ...values,
+                            category: e.target.value,
+                          });
+                        }}
+                        onBlur={handleBlur}
+                        value={values.category}
+                      />
+                      <ErrorMessage
+                        name="category"
+                        component="span"
+                        className={st.form_error}
+                      />
+                    </div>
+                    <div className={st.login_group}>
+                      <Field
+                        name="localization"
+                        placeholder="Localização"
+                        className={`${st.form_field} ${
+                          errors.localization && touched.localization
+                            ? st.form_field_error
+                            : ""
+                        }`}
+                        onChange={(e) => {
+                          handleChange(e);
+                          setFormValues({
+                            ...values,
+                            localization: e.target.value,
+                          });
+                        }}
+                        onBlur={handleBlur}
+                        value={values.localization}
+                      />
+                      <ErrorMessage
+                        name="localization"
+                        component="span"
+                        className={st.form_error}
+                      />
+                    </div>
+                  </Form>
+                )}
+              </Formik>
+            </Modal>
 
-          { typeof listCards !== 'undefined' && 
-          listCards.map((value) => {
-            return <Card />
-          })}
+            <Button
+              className={st.buttonModal}
+              type="primary"
+              onClick={() => {
+                setFormValues({
+                  name: "",
+                  space: "",
+                  category: "",
+                  localization: "",
+                });
+                setOpen(true);
+              }}
+            >
+              <PlusOutlined /> Adicionar
+            </Button>
+
+            {typeof listCards !== "undefined" &&
+              listCards.map((value) => {
+                return <Card />;
+              })}
+          </div>
+          </div>
         </div>
       </div>
     </>

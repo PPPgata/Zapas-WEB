@@ -3,5 +3,46 @@
 }
 
 .container {
+  display: flex;
   width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.containerStock {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+}
+
+.buttonModal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 250px;
+  width: 250px;
+  color: #263238;
+  background-color: #fff;
+}
+
+.listCards {
+  display: flex;
+  max-width: 1500px;
+  width: 100%;
+  min-height: 550px;
+  flex-wrap: wrap;
+  gap: 50px;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.header {
+  display: flex;
+  max-width: 1400px;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
 }
