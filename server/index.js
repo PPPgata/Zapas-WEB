@@ -75,6 +75,9 @@ app.post("/login", (req, res) => {
             );
             console.log(id_empresa);
             res.send({ msg: "Login realizado com sucesso!", token: token });
+            data: {
+              token: token;
+            }
           } else {
             res.send({ msg: "A senha está incorreto!" });
           }
@@ -86,11 +89,13 @@ app.post("/login", (req, res) => {
   );
 });
 
+
 app.post("/estoques", (req, res) => {
   const name = req.body.name;
   const space = req.body.space;
   const category = req.body.category;
   const localization = req.body.localization;
+  
   const token = req.body.token;
 
   if (!token) {
@@ -139,6 +144,30 @@ app.post("/estoques", (req, res) => {
       }
     );
   });
+});
+
+app.get("/getCards", (req, res) => {
+  const token = req.headers["authorization"]?.split(" ")[1];
+  
+  if (!token) {
+    return res.status(401).send("Token não fornecido");
+  }
+
+  jwt.verify(token, SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send("Token inválido");
+    }
+
+    const userID = decoded.id_empresa;
+
+    let SQL = "SELECT * FROM estoques WHERE empresa_id = ?";
+  
+    db.query(SQL, [userID], (err, result) => {
+      if (err) console.log(err);
+      else res.send(result);
+    });
+  });
+
 });
 
 app.listen(3001, () => {
