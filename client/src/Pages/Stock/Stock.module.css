@@ -15,6 +15,24 @@
   justify-content: center;
   align-items: center;
   gap: 50px;
+  padding: 50px;
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  max-width: 1400px;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h1 {
+  margin: 0;
+}
+
+.header .ant-input-search {
+  margin-left: auto;
 }
 
 .buttonModal {
@@ -39,10 +57,87 @@
   justify-content: flex-start;
 }
 
-.header {
-  display: flex;
-  max-width: 1400px;
-  width: 100%;
-  justify-content: space-between;
-  align-items: center;
+.modal {
+  .ant-modal-content {
+    background-color: #ffffff;
+    border-radius: 10px;
+  }
+
+  .ant-modal-header {
+    background-color: #f0f2f5;
+    border-radius: 10px 10px 0 0;
+  }
+
+  .ant-modal-title {
+    color: #000000;
+    font-weight: bold;
+  }
+
+  .ant-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 10px 24px;
+    background-color: #f0f2f5;
+    border-radius: 0 0 10px 10px;
+  }
+
+  .ant-modal-footer .ant-btn {
+    border-radius: 5px;
+  }
+
+  .ant-modal-footer .ant-btn-primary {
+    background-color: #1890ff;
+    border-color: #1890ff;
+  }
+
+  .ant-modal-body {
+    padding: 24px;
+  }
+
+  .login_form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .form_field {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #d9d9d9;
+    border-radius: 10px;
+  }
+
+  .form_field_error {
+    border-color: #ff4d4f;
+  }
+
+  .form_error {
+    color: #ff4d4f;
+    margin-top: 5px;
+  }
+}
+
+.deleteIcon {
+  color: #ff4d4f;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.deleteIcon:hover {
+  color: #ff0000;
+  transform: scale(1.05);
+  transition: all 0.2s ease;
+}
+
+.editIcon {
+  color: #1890ff;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.editIcon:hover {
+  color: #0050b3;
+  transform: scale(1.05);
+  transition: all 0.2s ease;
 }

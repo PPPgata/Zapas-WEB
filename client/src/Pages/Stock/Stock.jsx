@@ -5,11 +5,12 @@ import { Button, Modal, Input } from "antd";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Axios from "axios";
 import * as yup from "yup";
+import { PlusOutlined, EditOutlined } from "@ant-design/icons";
 import Card from "../../Components/cards/Card";
-import { PlusOutlined } from "@ant-design/icons";
-import type { SearchProps } from 'antd/es/input/Search';
+import { FaRegTrashAlt, FaTrashAlt } from "react-icons/fa";
 
 const { Search } = Input;
+const { confirm } = Modal;
 
 const Stock = () => {
   const [open, setOpen] = useState(false);
@@ -21,7 +22,9 @@ const Stock = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const token = localStorage.getItem("token");
-  const [listCards, setListCards] = useState();
+  const [listCards, setListCards] = useState([]);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editId, setEditId] = useState(null);
 
   const handleClickStock = (values, resetForm) => {
     setIsSubmitting(true);
@@ -38,6 +41,7 @@ const Stock = () => {
         setOpen(false);
         resetForm();
         setFormValues({ name: "", space: "", category: "", localization: "" });
+        setListCards((prevList) => [...prevList, response.data]);
       })
       .catch((error) => {
         console.error(error);
@@ -64,179 +68,240 @@ const Stock = () => {
     });
   }, [handleClickStock]);
 
+  const showDeleteConfirm = (id) => {
+    confirm({
+      title: "Tem certeza que deseja excluir este estoque?",
+      content: "Esta ação não pode ser desfeita.",
+      okText: "Sim",
+      okType: "danger",
+      cancelText: "Não",
+      onOk() {
+        handleDelete(id);
+      },
+    });
+  };
+
+  const openEditModal = (card) => {
+    setFormValues({
+      name: card.name,
+      space: card.space,
+      category: card.category,
+      localization: card.localization,
+    });
+    setIsEditMode(true);
+    setEditId(card.id);
+    setOpen(true);
+  };
+
+
+  const handleDelete = (id) => {
+    Axios.delete(`http://localhost:3001/deleteCard/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(() => {
+        setListCards(listCards.filter((card) => card.id !== id));
+      })
+      .catch((error) => {
+        console.error("Erro ao deletar o estoque:", error);
+      });
+  };
+
   return (
     <>
       <div className={st.window}>
         <SideBar />
         <div className={st.container}>
-
           <div className={st.containerStock}>
-
-          <div className={st.header}>
-          <h1 className={st.title}>Estoques disponíveis</h1>
-          <Search placeholder="input search text" style={{ width: 200 }} />
-          </div>
-          <div className={st.listCards}>
-            <Modal
-              className={st.modal}
-              title="Criando seu estoque"
-              centered
-              open={open}
-              onOk={() => {
-                validationStock
-                  .validate(formValues)
-                  .then((valid) => {
-                    if (valid) {
-                      handleClickStock(formValues, () => {});
-                    }
-                  })
-                  .catch((err) => {
-                    console.error(err);
-                  });
-              }}
-              onCancel={() => setOpen(false)}
-              confirmLoading={isSubmitting}
-              width={1000}
-              style={{ backgroundColor: "#263238" }}
-            >
-              <Formik
-                initialValues={formValues}
-                enableReinitialize
-                onSubmit={(values, { resetForm }) => {
+            <div className={st.header}>
+              <h1 className={st.title}>Estoques disponíveis</h1>
+              <Search placeholder="input search text" style={{ width: 250 }} />
+            </div>
+            <div className={st.listCards}>
+              <Modal
+                className={st.modal}
+                title="Criando seu estoque"
+                centered
+                open={open}
+                onOk={() => {
                   validationStock
-                    .validate(values)
+                    .validate(formValues)
                     .then((valid) => {
                       if (valid) {
-                        handleClickStock(values, resetForm);
+                        handleClickStock(formValues, () => {});
                       }
                     })
                     .catch((err) => {
                       console.error(err);
                     });
                 }}
-                validationSchema={validationStock}
+                onCancel={() => setOpen(false)}
+                confirmLoading={isSubmitting}
+                width={600}
               >
-                {({ errors, touched, handleChange, handleBlur, values }) => (
-                  <Form className={st.login_form}>
-                    <div className={st.login_group}>
-                      <Field
-                        name="name"
-                        placeholder="Nome do estoque"
-                        className={`${st.form_field} ${
-                          errors.name && touched.name ? st.form_field_error : ""
-                        }`}
-                        onChange={(e) => {
-                          handleChange(e);
-                          setFormValues({ ...values, name: e.target.value });
-                        }}
-                        onBlur={handleBlur}
-                        value={values.name}
-                      />
-                      <ErrorMessage
-                        name="name"
-                        component="span"
-                        className={st.form_error}
-                      />
-                    </div>
-                    <div className={st.login_group}>
-                      <Field
-                        name="space"
-                        placeholder="Espaço disponível"
-                        type="number"
-                        className={`${st.form_field} ${
-                          errors.space && touched.space
-                            ? st.form_field_error
-                            : ""
-                        }`}
-                        onChange={(e) => {
-                          handleChange(e);
-                          setFormValues({ ...values, space: e.target.value });
-                        }}
-                        onBlur={handleBlur}
-                        value={values.space}
-                      />
-                      <ErrorMessage
-                        name="space"
-                        component="span"
-                        className={st.form_error}
-                      />
-                    </div>
-                    <div className={st.login_group}>
-                      <Field
-                        name="category"
-                        placeholder="Categoria"
-                        className={`${st.form_field} ${
-                          errors.category && touched.category
-                            ? st.form_field_error
-                            : ""
-                        }`}
-                        onChange={(e) => {
-                          handleChange(e);
-                          setFormValues({
-                            ...values,
-                            category: e.target.value,
-                          });
-                        }}
-                        onBlur={handleBlur}
-                        value={values.category}
-                      />
-                      <ErrorMessage
-                        name="category"
-                        component="span"
-                        className={st.form_error}
-                      />
-                    </div>
-                    <div className={st.login_group}>
-                      <Field
-                        name="localization"
-                        placeholder="Localização"
-                        className={`${st.form_field} ${
-                          errors.localization && touched.localization
-                            ? st.form_field_error
-                            : ""
-                        }`}
-                        onChange={(e) => {
-                          handleChange(e);
-                          setFormValues({
-                            ...values,
-                            localization: e.target.value,
-                          });
-                        }}
-                        onBlur={handleBlur}
-                        value={values.localization}
-                      />
-                      <ErrorMessage
-                        name="localization"
-                        component="span"
-                        className={st.form_error}
-                      />
-                    </div>
-                  </Form>
-                )}
-              </Formik>
-            </Modal>
+                <Formik
+                  initialValues={formValues}
+                  enableReinitialize
+                  onSubmit={(values, { resetForm }) => {
+                    validationStock
+                      .validate(values)
+                      .then((valid) => {
+                        if (valid) {
+                          handleClickStock(values, resetForm);
+                        }
+                      })
+                      .catch((err) => {
+                        console.error(err);
+                      });
+                  }}
+                  validationSchema={validationStock}
+                >
+                  {({ errors, touched, handleChange, handleBlur, values }) => (
+                    <Form className={st.login_form}>
+                      <div className={st.login_group}>
+                        <Field
+                          name="name"
+                          placeholder="Nome do estoque"
+                          className={`${st.form_field} ${
+                            errors.name && touched.name
+                              ? st.form_field_error
+                              : ""
+                          }`}
+                          onChange={(e) => {
+                            handleChange(e);
+                            setFormValues({ ...values, name: e.target.value });
+                          }}
+                          onBlur={handleBlur}
+                          value={values.name}
+                        />
+                        <ErrorMessage
+                          name="name"
+                          component="span"
+                          className={st.form_error}
+                        />
+                      </div>
+                      <div className={st.login_group}>
+                        <Field
+                          name="space"
+                          placeholder="Espaço disponível"
+                          type="number"
+                          className={`${st.form_field} ${
+                            errors.space && touched.space
+                              ? st.form_field_error
+                              : ""
+                          }`}
+                          onChange={(e) => {
+                            handleChange(e);
+                            setFormValues({ ...values, space: e.target.value });
+                          }}
+                          onBlur={handleBlur}
+                          value={values.space}
+                        />
+                        <ErrorMessage
+                          name="space"
+                          component="span"
+                          className={st.form_error}
+                        />
+                      </div>
+                      <div className={st.login_group}>
+                        <Field
+                          name="category"
+                          placeholder="Categoria"
+                          className={`${st.form_field} ${
+                            errors.category && touched.category
+                              ? st.form_field_error
+                              : ""
+                          }`}
+                          onChange={(e) => {
+                            handleChange(e);
+                            setFormValues({
+                              ...values,
+                              category: e.target.value,
+                            });
+                          }}
+                          onBlur={handleBlur}
+                          value={values.category}
+                        />
+                        <ErrorMessage
+                          name="category"
+                          component="span"
+                          className={st.form_error}
+                        />
+                      </div>
+                      <div className={st.login_group}>
+                        <Field
+                          name="localization"
+                          placeholder="Localização"
+                          className={`${st.form_field} ${
+                            errors.localization && touched.localization
+                              ? st.form_field_error
+                              : ""
+                          }`}
+                          onChange={(e) => {
+                            handleChange(e);
+                            setFormValues({
+                              ...values,
+                              localization: e.target.value,
+                            });
+                          }}
+                          onBlur={handleBlur}
+                          value={values.localization}
+                        />
+                        <ErrorMessage
+                          name="localization"
+                          component="span"
+                          className={st.form_error}
+                        />
+                      </div>
+                    </Form>
+                  )}
+                </Formik>
+              </Modal>
 
-            <Button
-              className={st.buttonModal}
-              type="primary"
-              onClick={() => {
-                setFormValues({
-                  name: "",
-                  space: "",
-                  category: "",
-                  localization: "",
-                });
-                setOpen(true);
-              }}
-            >
-              <PlusOutlined /> Adicionar
-            </Button>
+              <Button
+                className={st.buttonModal}
+                type="primary"
+                onClick={() => {
+                  setFormValues({
+                    name: "",
+                    space: "",
+                    category: "",
+                    localization: "",
+                  });
+                  setOpen(true);
+                }}
+              >
+                <PlusOutlined /> Adicionar
+              </Button>
 
-            {typeof listCards !== "undefined" &&
-              listCards.map((value) => {
-                return <Card />;
-              })}
-          </div>
+              {typeof listCards !== "undefined" &&
+                listCards.map((value) => {
+                  return (
+                    <Card
+                      key={value.id}
+                      listCards={listCards}
+                      setListCards={setListCards}
+                      name={value.name}
+                      quantidade={value.space}
+                      categoria={value.category}
+                      local={value.localization}
+                      deleteIcon={
+                        <FaRegTrashAlt
+                          className={st.deleteIcon}
+                          style={{ fontSize: "20px" }}
+                          onClick={() => showDeleteConfirm(value.id)}
+                        />
+                      }
+                      editIcon={
+                        <EditOutlined
+                          className={st.editIcon}
+                          style={{ fontSize: "20px", marginLeft: "10px" }}
+                          onClick={() => openEditModal(value)}/>}
+                        />
+                  );
+                })}
+            </div>
           </div>
         </div>
       </div>
