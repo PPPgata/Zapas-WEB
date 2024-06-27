@@ -89,7 +89,6 @@ app.post("/login", (req, res) => {
   );
 });
 
-
 app.post("/estoques", (req, res) => {
   const name = req.body.name;
   const space = req.body.space;
@@ -109,16 +108,6 @@ app.post("/estoques", (req, res) => {
       return;
     }
 
-    db.query(
-      "SELECT * FROM estoques WHERE name = ?",
-      [name],
-      (err, results) => {
-        if (err) {
-          console.log(err);
-          res.status(500).send({ msg: "Erro ao buscar estoques" });
-        } else if (results.length > 0) {
-          res.send({ msg: "Estoque já cadastrado!" });
-        } else {
           db.query(
             "INSERT INTO estoques (name, space, category, localization, empresa_id) VALUES (?, ?, ?, ?, ?)",
             [name, space, category, localization, decoded.id_empresa],
@@ -140,9 +129,8 @@ app.post("/estoques", (req, res) => {
               }
             }
           );
-        }
-      }
-    );
+        
+      
   });
 });
 
@@ -168,6 +156,49 @@ app.get("/getCards", (req, res) => {
     });
   });
 
+});
+
+app.delete("/deleteCard/:id", (req, res) => {
+  const token = req.headers["authorization"]?.split(" ")[1];
+
+  if(!token) {
+    return res.status(401).send("Token não fornecido");
+  }
+
+  jwt.verify(token, SECRET, (err, decoded) => {
+    if(err) {
+      return res.status(401).send("Token inválido");
+    }
+
+    const userID = decoded.id_empresa;
+    const cardID = req.params.id;
+
+    let SQL = "DELETE FROM estoques WHERE id = ? AND empresa_id = ?";
+
+    db.query(SQL, [cardID, userID], (err, result) => {
+      if(err) console.log(err);
+      else res.send(result);
+    });
+  });
+
+})
+
+app.put("/estoques/:id", (req, res) => {
+  const { id } = req.params;
+  const { name, space, category, localization } = req.body;
+
+  db.query(
+    "UPDATE estoques SET name = ?, space = ?, category = ?, localization = ? WHERE id = ?",
+    [name, space, category, localization, id],
+    (err, result) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send({ msg: "Erro ao atualizar o estoque" });
+      } else {
+        res.send({ msg: "Estoque atualizado com sucesso" });
+      }
+    }
+  );
 });
 
 app.listen(3001, () => {
