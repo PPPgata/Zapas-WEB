@@ -94,7 +94,7 @@ app.post("/estoques", (req, res) => {
   const space = req.body.space;
   const category = req.body.category;
   const localization = req.body.localization;
-  
+
   const token = req.body.token;
 
   if (!token) {
@@ -108,35 +108,31 @@ app.post("/estoques", (req, res) => {
       return;
     }
 
-          db.query(
-            "INSERT INTO estoques (name, space, category, localization, empresa_id) VALUES (?, ?, ?, ?, ?)",
-            [name, space, category, localization, decoded.id_empresa],
-            (err, insertResult) => {
-              if (err) {
-                console.log(err);
-                res.status(500).send({ msg: "Erro ao inserir estoque" });
-              } else {
-                db.query("SELECT * FROM estoques", (err, allEstoques) => {
-                  if (err) {
-                    console.log(err);
-                    res
-                      .status(500)
-                      .send({ msg: "Erro ao buscar todos os estoques" });
-                  } else {
-                    res.send(allEstoques);
-                  }
-                });
-              }
+    db.query(
+      "INSERT INTO estoques (name, space, category, localization, empresa_id) VALUES (?, ?, ?, ?, ?)",
+      [name, space, category, localization, decoded.id_empresa],
+      (err, insertResult) => {
+        if (err) {
+          console.log(err);
+          res.status(500).send({ msg: "Erro ao inserir estoque" });
+        } else {
+          db.query("SELECT * FROM estoques", (err, allEstoques) => {
+            if (err) {
+              console.log(err);
+              res.status(500).send({ msg: "Erro ao buscar todos os estoques" });
+            } else {
+              res.send(allEstoques);
             }
-          );
-        
-      
+          });
+        }
+      }
+    );
   });
 });
 
 app.get("/getCards", (req, res) => {
   const token = req.headers["authorization"]?.split(" ")[1];
-  
+
   if (!token) {
     return res.status(401).send("Token não fornecido");
   }
@@ -149,24 +145,23 @@ app.get("/getCards", (req, res) => {
     const userID = decoded.id_empresa;
 
     let SQL = "SELECT * FROM estoques WHERE empresa_id = ?";
-  
+
     db.query(SQL, [userID], (err, result) => {
       if (err) console.log(err);
       else res.send(result);
     });
   });
-
 });
 
 app.delete("/deleteCard/:id", (req, res) => {
   const token = req.headers["authorization"]?.split(" ")[1];
 
-  if(!token) {
+  if (!token) {
     return res.status(401).send("Token não fornecido");
   }
 
   jwt.verify(token, SECRET, (err, decoded) => {
-    if(err) {
+    if (err) {
       return res.status(401).send("Token inválido");
     }
 
@@ -176,12 +171,11 @@ app.delete("/deleteCard/:id", (req, res) => {
     let SQL = "DELETE FROM estoques WHERE id = ? AND empresa_id = ?";
 
     db.query(SQL, [cardID, userID], (err, result) => {
-      if(err) console.log(err);
+      if (err) console.log(err);
       else res.send(result);
     });
   });
-
-})
+});
 
 app.put("/estoques/:id", (req, res) => {
   const { id } = req.params;
@@ -200,6 +194,119 @@ app.put("/estoques/:id", (req, res) => {
     }
   );
 });
+
+app.post("/registercolaborator", (req, res) => {
+  const { cpf, name, cargo, responsavel, id_empresa } = req.body;
+
+  const token = req.body.token;
+
+  if (!token) {
+    res.status(401).send({ msg: "Token não informado" });
+    return;
+  }
+
+  jwt.verify(token, SECRET, (err, decoded) => {
+    if (err) {
+      res.status(401).send({ msg: "Token inválido" });
+      return;
+    }
+
+    db.query(
+      "INSERT INTO users (cpf, nome, cargo, responsavel, id_empresa) VALUES (?, ?, ?, ?, ?)",
+      [cpf, name, cargo, responsavel, decoded.id_empresa],
+      (err, insertResult) => {
+        if (err) {
+          console.log(err);
+          res.status(500).send({ msg: "Erro ao inserir colaborador" });
+        } else {
+          db.query("SELECT * FROM users", (err, allColaboradores) => {
+            if (err) {
+              console.log(err);
+              res
+                .status(500)
+                .send({ msg: "Erro ao buscar todos os colaboradores" });
+            } else {
+              res.send(allColaboradores);
+            }
+          });
+        }
+      }
+    );
+  });
+});
+
+app.get("/getColaborators", (req, res) => {
+  const token = req.headers["authorization"]?.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).send("Token não fornecido");
+  }
+
+  jwt.verify(token, SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send("Token inválido");
+    }
+
+    const userID = decoded.id_empresa;
+
+    let SQL = "SELECT * FROM users WHERE id_empresa = ?";
+
+    db.query(SQL, [userID], (err, result) => {
+      if (err) console.log(err);
+      else res.send(result);
+    });
+  });
+});
+
+app.delete("/deleteColaborator/:id", (req, res) => {
+  const token = req.headers["authorization"]?.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).send("Token não fornecido");
+  }
+
+  jwt.verify(token, SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send("Token inválido");
+    }
+
+    const userID = decoded.id_empresa;
+    const colaboratorID = req.params.id;
+
+    let SQL = "DELETE FROM users WHERE id = ? AND id_empresa = ?";
+
+    db.query(SQL, [colaboratorID, userID], (err, result) => {
+      if (err) console.log(err);
+      else res.send(result);
+    });
+  });
+});
+
+app.put("/editColaborator/:id", (req, res) => {
+  console.log(req.headers["authorization"]);
+  const token = req.headers["authorization"]?.split(" ")[1];
+  console.log(token);
+
+  if (!token) {
+    return res.status(401).send("Token não fornecido");
+  }
+
+  jwt.verify(token, SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send("Token inválido");
+    }
+
+    const userID = decoded.id_empresa;
+    const colaboratorID = req.params.id;
+
+    let SQL = "UPDATE users SET id_empresa = ? WHERE id = ?";
+
+    db.query(SQL, [userID, colaboratorID], (err, result) => {
+      if (err) console.log(err);
+      else res.send(result);
+    });
+  });
+})
 
 app.listen(3001, () => {
   console.log("Rodando na porta 3001");
