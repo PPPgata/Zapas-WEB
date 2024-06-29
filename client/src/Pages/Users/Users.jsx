@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import SideBar from "../../Components/SideBar/SideBar";
 import st from "./Users.module.css";
-import { Input, Button, Modal } from "antd";
+import { Input, Button, Modal, notification } from "antd";
 import {
   PlusOutlined,
   ExclamationCircleOutlined,
   EditOutlined,
 } from "@ant-design/icons";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import InputMask from "react-input-mask";
 import * as yup from "yup";
 import Axios from "axios";
-import { FaRegTrashAlt, FaTrashAlt } from "react-icons/fa";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 const { Search } = Input;
 const { confirm } = Modal;
@@ -19,11 +20,15 @@ const Users = () => {
   const [open, setOpen] = React.useState(false);
   const [listColaborators, setListColaborators] = useState([]);
   const [search, setSearch] = useState("");
+  const [selectedColaborator, setSelectedColaborator] = useState(null);
+  const [isEdit, setIsEdit] = useState(false);
 
   const validationUser = yup.object().shape({
-    cpf: yup.string().required("Campo obrigatório"),
+    cpf: yup
+      .string()
+      .required("Campo obrigatório")
+      .matches(/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/, "Formato de CPF inválido"),
     name: yup.string().required("Campo obrigatório"),
-    cargo: yup.string().required("Campo obrigatório"),
     responsavel: yup.string().required("Campo obrigatório"),
   });
 
@@ -47,6 +52,36 @@ const Users = () => {
       console.log(response.data);
       resetForm();
       setOpen(false);
+      notification.success({
+        message: "Sucesso",
+        description: "Usuário cadastrado com sucesso",
+        placement: "bottomRight",
+        duration: 1.5,
+      });
+    });
+  };
+
+  const handleUpdate = (values, resetForm) => {
+    const token = localStorage.getItem("token");
+
+    Axios.put(`http://localhost:3001/editColaborator/${selectedColaborator.id}`, {
+      cpf: values.cpf,
+      name: values.name,
+      cargo: values.cargo,
+      responsavel: values.responsavel,
+      token: token,
+    }).then((response) => {
+      console.log(response.data);
+      resetForm();
+      setOpen(false);
+      setIsEdit(false);
+      setSelectedColaborator(null);
+      notification.success({
+        message: "Sucesso",
+        description: "Usuário atualizado com sucesso",
+        placement: "bottomRight",
+        duration: 1.5,
+      });
     });
   };
 
@@ -60,7 +95,7 @@ const Users = () => {
     }).then((response) => {
       setListColaborators(response.data);
     });
-  }, [handleClick]);
+  }, [handleClick, handleUpdate]);
 
   const showDeleteConfirm = (id) => {
     confirm({
@@ -87,20 +122,23 @@ const Users = () => {
         Authorization: `Bearer ${token}`,
       },
     }).then((response) => {
-      // console.log(response.data);
+      notification.success({
+        message: "Sucesso",
+        description: "Usuário deletado com sucesso",
+        placement: "bottomRight",
+        duration: 1.5,
+        icon: <FaRegTrashAlt style={{ fontSize: "20px", color: "red" }} />,
+      });
     });
   };
 
-  const handleEdit = (id) => {
-    const token = localStorage.getItem("token");
-
-    Axios.put(`http://localhost:3001/editColaborator/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then((response) => {
-      console.log(response.data);
+  const handleEdit = (colaborator) => {
+    setSelectedColaborator({
+      ...colaborator,
+      name: colaborator.nome, // Ajuste para garantir que o nome correto seja preenchido
     });
+    setIsEdit(true);
+    setOpen(true);
   };
 
   return (
@@ -128,29 +166,42 @@ const Users = () => {
               <PlusOutlined /> Adicionar Funcionários / Fornecedores
             </Button>
             <Modal
-              title="Adicionar Funcionários / Fornecedores"
+              title={isEdit ? "Editar Funcionário / Fornecedor" : "Adicionar Funcionário / Fornecedor"}
               className={st.modal}
               visible={open}
-              onCancel={() => setOpen(false)}
+              onCancel={() => {
+                setOpen(false);
+                setIsEdit(false);
+                setSelectedColaborator(null);
+              }}
               footer={null}
             >
               <Formik
-                initialValues={initialValues}
+                initialValues={selectedColaborator || initialValues}
                 validationSchema={validationUser}
+                enableReinitialize={true}
                 onSubmit={(values, { resetForm }) => {
-                  handleClick(values, resetForm);
+                  if (isEdit) {
+                    handleUpdate(values, resetForm);
+                  } else {
+                    handleClick(values, resetForm);
+                  }
                 }}
               >
                 {({ handleSubmit, handleChange, handleBlur, values }) => (
                   <Form>
                     <div className={st.form}>
                       <label>CPF</label>
-                      <Field
-                        name="cpf"
-                        type="text"
-                        className={st.input}
-                        placeholder="Digite o CPF"
-                      />
+                      <Field name="cpf">
+                        {({ field }) => (
+                          <InputMask
+                            {...field}
+                            mask="999.999.999-99"
+                            className={st.input}
+                            placeholder="Digite o CPF"
+                          />
+                        )}
+                      </Field>
                       <ErrorMessage name="cpf" component="span" />
                     </div>
                     <div className={st.form}>
@@ -176,11 +227,14 @@ const Users = () => {
                     <div className={st.form}>
                       <label>Responsável</label>
                       <Field
+                        as="select"
                         name="responsavel"
-                        type="text"
                         className={st.input}
-                        placeholder="Digite o responsável"
-                      />
+                      >
+                        <option value="" label="Selecione o responsável" />
+                        <option value="Funcionário" label="Funcionário" />
+                        <option value="Fornecedor" label="Fornecedor" />
+                      </Field>
                       <ErrorMessage name="responsavel" component="span" />
                     </div>
                     <Button
@@ -188,7 +242,7 @@ const Users = () => {
                       onClick={handleSubmit}
                       className={st.buttonModal}
                     >
-                      Adicionar
+                      {isEdit ? "Atualizar" : "Adicionar"}
                     </Button>
                   </Form>
                 )}
@@ -205,7 +259,6 @@ const Users = () => {
                 <th>Opções</th>
               </tr>
             </thead>
-
             <tbody>
               {listColaborators
                 .filter((value) => {
@@ -232,7 +285,7 @@ const Users = () => {
                       <EditOutlined
                         className={st.editIcon}
                         style={{ fontSize: "20px" }}
-                        onClick={() => handleEdit(value.id)}
+                        onClick={() => handleEdit(value)}
                       />
                       <FaRegTrashAlt
                         className={st.deleteIcon}
