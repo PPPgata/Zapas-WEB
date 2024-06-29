@@ -56,34 +56,34 @@ const Users = () => {
         message: "Sucesso",
         description: "Usuário cadastrado com sucesso",
         placement: "bottomRight",
-        duration: 1.5,
+        duration: 3,
       });
     });
   };
 
   const handleUpdate = (values, resetForm) => {
     const token = localStorage.getItem("token");
-
-    Axios.put(`http://localhost:3001/editColaborator/${selectedColaborator.id}`, {
+  
+    Axios.put(`http://localhost:3001/editColaborator/${values.id}`, {
       cpf: values.cpf,
       name: values.name,
       cargo: values.cargo,
       responsavel: values.responsavel,
-      token: token,
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     }).then((response) => {
-      console.log(response.data);
-      resetForm();
       setOpen(false);
-      setIsEdit(false);
-      setSelectedColaborator(null);
       notification.success({
         message: "Sucesso",
         description: "Usuário atualizado com sucesso",
         placement: "bottomRight",
-        duration: 1.5,
+        duration: 3,
       });
     });
   };
+  
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -126,7 +126,7 @@ const Users = () => {
         message: "Sucesso",
         description: "Usuário deletado com sucesso",
         placement: "bottomRight",
-        duration: 1.5,
+        duration: 3,
         icon: <FaRegTrashAlt style={{ fontSize: "20px", color: "red" }} />,
       });
     });
@@ -135,7 +135,7 @@ const Users = () => {
   const handleEdit = (colaborator) => {
     setSelectedColaborator({
       ...colaborator,
-      name: colaborator.nome, // Ajuste para garantir que o nome correto seja preenchido
+      name: colaborator.nome,
     });
     setIsEdit(true);
     setOpen(true);
