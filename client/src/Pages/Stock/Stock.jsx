@@ -93,7 +93,6 @@ const Stock = () => {
     setOpen(true);
   };
 
-
   const handleDelete = (id) => {
     Axios.delete(`http://localhost:3001/deleteCard/${id}`, {
       headers: {
