@@ -18,14 +18,14 @@
   align-items: end;
 }
 
-.content{
-  background-color: #F8F8F8;
+.content {
+  background-color: #f8f8f8;
   max-width: 1400px;
   min-height: 800px;
   width: 100%;
   border-radius: 20px;
   padding: 50px;
-  box-shadow: 0px 0px 10px 0px rgba(0,1,1,0.2);
+  box-shadow: 0px 0px 10px 0px rgba(0, 1, 1, 0.2);
   display: flex;
   flex-direction: column;
   gap: 70px;
@@ -41,7 +41,7 @@
   gap: 30px;
 }
 
-.buttonAdd{
+.buttonAdd {
   height: 35px;
   background-color: #263238;
 }
@@ -56,17 +56,59 @@
   gap: 3rem;
 }
 
-.table thead{
+.table thead {
   font-size: 18px;
   font-weight: 500;
 }
 
-.table tbody{
+.table tbody {
   text-align: center;
   font-size: 16px;
 }
 
-.table tbody tr td{
+.table tbody tr td {
   margin-top: 20px;
   padding: 10px;
+}
+
+.input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+}
+
+.buttonModal {
+  width: 100%;
+  margin-top: 25px;
+}
+
+.editIcon{
+  color: #1890ff;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.editIcon:hover {
+  color: #40a9ff;
+  transform: scale(1.05);
+  transition: all 0.2s ease;
+}
+
+.deleteIcon {
+  color: #ff4d4f;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.deleteIcon:hover {
+  color: #ff0000;
+  transform: scale(1.05);
+  transition: all 0.2s ease;
+}
+
+.buttonsActions{
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
