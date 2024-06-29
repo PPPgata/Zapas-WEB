@@ -283,7 +283,7 @@ app.delete("/deleteColaborator/:id", (req, res) => {
 });
 
 app.put("/editColaborator/:id", (req, res) => {
-  console.log(req.headers["authorization"]);
+  console.log("Ta chegando no Back");
   const token = req.headers["authorization"]?.split(" ")[1];
   console.log(token);
 
@@ -299,9 +299,9 @@ app.put("/editColaborator/:id", (req, res) => {
     const userID = decoded.id_empresa;
     const colaboratorID = req.params.id;
 
-    let SQL = "UPDATE users SET id_empresa = ? WHERE id = ?";
+    let SQL = "UPDATE users SET cpf = ?, nome = ?, cargo = ?, responsavel = ? WHERE id = ? AND id_empresa = ?";
 
-    db.query(SQL, [userID, colaboratorID], (err, result) => {
+    db.query(SQL, [req.body.cpf, req.body.name, req.body.cargo, req.body.responsavel, colaboratorID, userID], (err, result) => {
       if (err) console.log(err);
       else res.send(result);
     });
