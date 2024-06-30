@@ -84,7 +84,6 @@ const Users = () => {
     });
   };
   
-
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -226,6 +225,7 @@ const Users = () => {
                     </div>
                     <div className={st.form}>
                       <label>Responsável</label>
+                      
                       <Field
                         as="select"
                         name="responsavel"
@@ -235,6 +235,7 @@ const Users = () => {
                         <option value="Funcionário" label="Funcionário" />
                         <option value="Fornecedor" label="Fornecedor" />
                       </Field>
+
                       <ErrorMessage name="responsavel" component="span" />
                     </div>
                     <Button

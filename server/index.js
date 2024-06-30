@@ -283,9 +283,7 @@ app.delete("/deleteColaborator/:id", (req, res) => {
 });
 
 app.put("/editColaborator/:id", (req, res) => {
-  console.log("Ta chegando no Back");
   const token = req.headers["authorization"]?.split(" ")[1];
-  console.log(token);
 
   if (!token) {
     return res.status(401).send("Token não fornecido");
@@ -299,14 +297,153 @@ app.put("/editColaborator/:id", (req, res) => {
     const userID = decoded.id_empresa;
     const colaboratorID = req.params.id;
 
-    let SQL = "UPDATE users SET cpf = ?, nome = ?, cargo = ?, responsavel = ? WHERE id = ? AND id_empresa = ?";
+    let SQL =
+      "UPDATE users SET cpf = ?, nome = ?, cargo = ?, responsavel = ? WHERE id = ? AND id_empresa = ?";
 
-    db.query(SQL, [req.body.cpf, req.body.name, req.body.cargo, req.body.responsavel, colaboratorID, userID], (err, result) => {
+    db.query(
+      SQL,
+      [
+        req.body.cpf,
+        req.body.name,
+        req.body.cargo,
+        req.body.responsavel,
+        colaboratorID,
+        userID,
+      ],
+      (err, result) => {
+        if (err) console.log(err);
+        else res.send(result);
+      }
+    );
+  });
+});
+
+app.post("/registerproduct", (req, res) => {
+  const { name, category, cost, price, stock, minimalUnit } = req.body;
+
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(" ")[1];
+
+  console.log(token);
+
+  if (!token) {
+    res.status(401).send({ msg: "Token não informado" });
+    return;
+  }
+
+  jwt.verify(token, SECRET, (err, decoded) => {
+    if (err) {
+      res.status(401).send({ msg: "Token inválido" });
+      return;
+    }
+
+    db.query(
+      "INSERT INTO itens (name, category, cost, value, stock, total, minimal_unit, empresa_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+      [name, category, cost, price, stock, 0, minimalUnit, decoded.id_empresa],
+      (err, insertResult) => {
+        if (err) {
+          console.log(err);
+          res.status(500).send({ msg: "Erro ao inserir produto" });
+        } else {
+          db.query("SELECT * FROM itens", (err, allProducts) => {
+            if (err) {
+              console.log(err);
+              res.status(500).send({ msg: "Erro ao buscar todos os produtos" });
+            } else {
+              res.send(allProducts);
+            }
+          });
+        }
+      }
+    );
+  });
+});
+
+app.get("/getItens", (req, res) => {
+  const token = req.headers["authorization"]?.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).send("Token não fornecido");
+  }
+
+  jwt.verify(token, SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send("Token inválido");
+    }
+
+    const userID = decoded.id_empresa;
+
+    let SQL = "SELECT * FROM itens WHERE empresa_id = ?";
+
+    db.query(SQL, [userID], (err, result) => {
       if (err) console.log(err);
       else res.send(result);
     });
   });
-})
+});
+
+app.delete("/deleteItem/:id", (req, res) => {
+  const token = req.headers["authorization"]?.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).send("Token não fornecido");
+  }
+
+  jwt.verify(token, SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send("Token inválido");
+    }
+
+    const userID = decoded.id_empresa;
+    const itenID = req.params.id;
+
+    let SQL = "DELETE FROM itens WHERE id = ? AND empresa_id = ?";
+
+    db.query(SQL, [itenID, userID], (err, result) => {
+      if (err) console.log(err);
+      else res.send(result);
+    });
+  });
+});
+
+app.put("/editItem/:id", (req, res) => {
+  const token = req.headers["authorization"]?.split(" ")[1];
+  console.log(token);
+
+  if (!token) {
+    return res.status(401).send("Token não fornecido");
+  }
+
+  jwt.verify(token, SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send("Token inválido");
+    }
+
+    const userID = decoded.id_empresa;
+    const itenID = req.params.id;
+
+    let SQL =
+      "UPDATE itens SET name = ?, category = ?, cost = ?, value = ?, stock = ?, minimal_unit = ? WHERE id = ? AND empresa_id = ?";
+
+    db.query(
+      SQL,
+      [
+        req.body.name,
+        req.body.category,
+        req.body.cost,
+        req.body.price,
+        req.body.stock,
+        req.body.minimalUnit,
+        itenID,
+        userID,
+      ],
+      (err, result) => {
+        if (err) console.log(err);
+        else res.send(result);
+      }
+    );
+  });
+});
 
 app.listen(3001, () => {
   console.log("Rodando na porta 3001");
