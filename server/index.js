@@ -324,8 +324,6 @@ app.post("/registerproduct", (req, res) => {
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(" ")[1];
 
-  console.log(token);
-
   if (!token) {
     res.status(401).send({ msg: "Token não informado" });
     return;
@@ -408,7 +406,7 @@ app.delete("/deleteItem/:id", (req, res) => {
 
 app.put("/editItem/:id", (req, res) => {
   const token = req.headers["authorization"]?.split(" ")[1];
-  console.log(token);
+  console.log("token");
 
   if (!token) {
     return res.status(401).send("Token não fornecido");
@@ -442,6 +440,126 @@ app.put("/editItem/:id", (req, res) => {
         else res.send(result);
       }
     );
+  });
+});
+
+app.put("/addItemStock/:id", (req, res) => {
+  const token = req.headers["authorization"]?.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).send("Token não fornecido");
+  }
+
+  jwt.verify(token, SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send("Token inválido");
+    }
+
+    const userID = decoded.id_empresa;
+    const itenID = req.params.id;
+    const newValue = req.body.newValue;
+
+    let SQL =
+      "UPDATE itens SET total = total + ? WHERE name = ? AND empresa_id = ?";
+
+    db.query(SQL, [newValue, itenID, userID], (err, result) => {
+      if (err) console.log(err);
+      else res.send(result);
+    });
+  });
+});
+
+app.put("/removeItemStock/:id", (req, res) => {
+  const token = req.headers["authorization"]?.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).send("Token não fornecido");
+  }
+
+  jwt.verify(token, SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send("Token inválido");
+    }
+
+    const userID = decoded.id_empresa;
+    const itenID = req.params.id;
+    const newValue = req.body.newValue;
+
+    let SQL =
+      "UPDATE itens SET total = total - ? WHERE name = ? AND empresa_id = ?";
+
+    db.query(SQL, [newValue, itenID, userID], (err, result) => {
+      if (err) console.log(err);
+      else {
+        res.send(result);
+        console.log(result);
+      }
+    });
+  });
+});
+
+app.post("/historico", (req, res) => {
+  const { nome, responsavel, descricao, empresa_id } = req.body;
+
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (!token) {
+    res.status(401).send({ msg: "Token não informado" });
+    return;
+  }
+
+  jwt.verify(token, SECRET, (err, decoded) => {
+    if (err) {
+      res.status(401).send({ msg: "Token inválido" });
+      return;
+    }
+
+    db.query(
+      "INSERT INTO historico_transacoes (nome_transacao, responsavel, descricao, empresa_id) VALUES (?, ?, ?, ?)",
+      [nome, responsavel, descricao, decoded.id_empresa],
+      (err, insertResult) => {
+        if (err) {
+          console.log(err);
+          res.status(500).send({ msg: "Erro ao inserir transação" });
+        } else {
+          db.query(
+            "SELECT * FROM historico_transacoes",
+            (err, allTransactions) => {
+              if (err) {
+                console.log(err);
+                res.status(500).send({ msg: "Erro ao buscar todas as transações" });
+              } else {
+                res.send(allTransactions);
+              }
+            }
+          );
+        }
+      }
+    );
+  });
+});
+
+
+app.get("/getHistory", (req, res) => {
+  const token = req.headers["authorization"]?.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).send("Token não fornecido");
+  }
+
+  jwt.verify(token, SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send("Token inválido");
+    }
+
+    const userID = decoded.id_empresa;
+
+    let SQL = "SELECT * FROM historico_transacoes WHERE empresa_id = ?";
+    db.query(SQL, [userID], (err, result) => {
+      if (err) console.log(err);
+      else res.send(result);
+    });
   });
 });
 

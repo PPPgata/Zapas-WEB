@@ -69,7 +69,7 @@
 
 .table tbody tr td{
   margin-top: 20px;
-  padding: 15px;
+  padding: 10px;
 }
 
 .input {
@@ -89,4 +89,34 @@
   padding: 8px;
   border: 1px solid #d9d9d9;
   border-radius: 10px;
+}
+
+.editIcon{
+  color: #1890ff;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.editIcon:hover {
+  color: #40a9ff;
+  transform: scale(1.05);
+  transition: all 0.2s ease;
+}
+
+.deleteIcon {
+  color: #ff4d4f;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.deleteIcon:hover {
+  color: #ff0000;
+  transform: scale(1.05);
+  transition: all 0.2s ease;
+}
+
+.buttonsActions{
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

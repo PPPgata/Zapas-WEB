@@ -5,8 +5,8 @@
 .container {
   display: flex;
   width: 100%;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start; /* Ajuste para alinhar a sidebar no topo */
+  justify-content: flex-start; /* Ajuste para alinhar a sidebar no topo */
 }
 
 .containerStock {

@@ -52,10 +52,10 @@ const Itens = () => {
 
   const handleClickAddItem = (values, { resetForm }) => {
     const token = localStorage.getItem("token");
-
-    const valorSemFormatacao = values.cost.replace("R$ ", "");
-    const precoSemFormatacao = values.price.replace("R$ ", "");
-
+  
+    const valorSemFormatacao = String(values.cost).replace("R$ ", "").trim();
+    const precoSemFormatacao = String(values.price).replace("R$ ", "").trim();
+  
     if (isEdit && selectedIten) {
       Axios.put(
         `http://localhost:3001/editItem/${selectedIten.id}`,
@@ -114,6 +114,7 @@ const Itens = () => {
       });
     }
   };
+  
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -159,7 +160,16 @@ const Itens = () => {
   };
 
   const handleEditItem = (value) => {
-    setSelectedIten(value);
+    const selectedItem = {
+      id: value.id,
+      name: value.name,
+      category: value.category,
+      cost: value.cost,
+      price: value.value,
+      stock: value.stock,
+      minimalUnit: value.minimal_unit,
+    };
+    setSelectedIten(selectedItem);
     setIsEdit(true);
     setOpen(true);
   };
@@ -242,7 +252,7 @@ const Itens = () => {
                       <ErrorMessage name="cost" component="div" />
                     </div>
                     <div className={st.form}>
-                      <label>Valor</label>
+                      <label>Valor a ser vendido</label>
                       <Field name="price">
                         {({ field }) => (
                           <InputMask
@@ -262,7 +272,7 @@ const Itens = () => {
                         name="minimalUnit"
                         className={st.input}
                         type="number"
-                        placeholder="15 unidades mínimas"
+                        placeholder="Número de unidades mínimas"
                       />
                       <ErrorMessage name="minimalUnit" component="div" />
                     </div>
@@ -341,13 +351,13 @@ const Itens = () => {
                     <td>{value.name}</td>
                     <td>{value.category}</td>
                     <td>{value.cost}</td>
-                    <td>{value.price}</td>
+                    <td>{value.value}</td>
                     <td>
                       {listCards.map((card) =>
                         card.id === value.stock ? card.name : null
                       )}
                     </td>
-                    <td>{value.minimalUnit}</td>
+                    <td>{value.total}</td>
                     <td className={st.buttonsActions}>
                       <EditOutlined
                         className={st.editIcon}
