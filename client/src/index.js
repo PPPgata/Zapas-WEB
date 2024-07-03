@@ -11,7 +11,6 @@ import Stock from "./Pages/Stock/Stock";
 import Itens from "./Pages/Itens/Itens";
 import Users from "./Pages/Users/Users";
 import History from "./Pages/History/History";
-import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -25,41 +24,31 @@ const router = createBrowserRouter([
       {
         path: "/dashboard",
         element: (
-          <ProtectedRoute>
             <Dashboard />
-          </ProtectedRoute>
         ),
       },
       {
         path: "/estoques",
         element: (
-          <ProtectedRoute>
             <Stock />
-          </ProtectedRoute>
         ),
       },
       {
         path: "/itens",
         element: (
-          <ProtectedRoute>
             <Itens />
-          </ProtectedRoute>
         ),
       },
       {
         path: "/usuarios",
         element: (
-          <ProtectedRoute>
             <Users />
-          </ProtectedRoute>
         ),
       },
       {
         path: "/historico",
         element: (
-          <ProtectedRoute>
             <History />
-          </ProtectedRoute>
         ),
       },
     ],
@@ -68,7 +57,5 @@ const router = createBrowserRouter([
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
     <RouterProvider router={router} />
-  </React.StrictMode>
 );

@@ -56,57 +56,6 @@ const Stock = () => {
     localization: yup.string().required("Este campo é obrigatório"),
   });
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    Axios.get("http://localhost:3001/getCards", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then((response) => {
-      setListCards(response.data);
-    });
-  }, [handleClickStock]);
-
-  const showDeleteConfirm = (id) => {
-    confirm({
-      title: "Tem certeza que deseja excluir este estoque?",
-      content: "Esta ação não pode ser desfeita.",
-      okText: "Sim",
-      okType: "danger",
-      cancelText: "Não",
-      onOk() {
-        handleDelete(id);
-      },
-    });
-  };
-
-  const openEditModal = (card) => {
-    setFormValues({
-      name: card.name,
-      space: card.space,
-      category: card.category,
-      localization: card.localization,
-    });
-    setIsEditMode(true);
-    setEditId(card.id);
-    setOpen(true);
-  };
-
-  const handleDelete = (id) => {
-    Axios.delete(`http://localhost:3001/deleteCard/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(() => {
-        setListCards(listCards.filter((card) => card.id !== id));
-      })
-      .catch((error) => {
-        console.error("Erro ao deletar o estoque:", error);
-      });
-  };
-
   return (
     <>
       <div className={st.window}>
@@ -289,14 +238,14 @@ const Stock = () => {
                         <FaRegTrashAlt
                           className={st.deleteIcon}
                           style={{ fontSize: "20px" }}
-                          onClick={() => showDeleteConfirm(value.id)}
+                          onClick={() => console.log("1")}
                         />
                       }
                       editIcon={
                         <EditOutlined
                           className={st.editIcon}
                           style={{ fontSize: "20px", marginLeft: "10px" }}
-                          onClick={() => openEditModal(value)}/>}
+                          onClick={() => console.log('2')}/>}
                         />
                   );
                 })}

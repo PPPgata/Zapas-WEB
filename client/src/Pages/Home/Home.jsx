@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import NavBar from "../../Components/NavBar/NavBar";
 import st from "./Home.module.css";
 import logo from "../../assets/img/Logo.svg";
@@ -7,6 +7,26 @@ import mapaBrasil from "../../assets/img/mapaBrasil.svg";
 import { Link } from "react-router-dom";
 
 const Home = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: ""
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    localStorage.setItem("formData", JSON.stringify(formData));
+    alert("Dados salvos com sucesso!");
+  };
+
   return (
     <>
       <div className={st.fundoSection_1}>
@@ -35,22 +55,45 @@ const Home = () => {
                 orçamento personalizado e descubra como otimizar seus processos
                 agora.
               </p>
-              <ul>
-                <li>
-                  <input placeholder="Name" type="text" />
-                </li>
-                <li>
-                  <input placeholder="E-mail " type="text" />
-                </li>
-                <li>
-                  <input placeholder="Mensagem " type="text" />
-                </li>
-                <li>
-                  <a className={st.buttonCadastro} href="#">
-                    Enviar contato
-                  </a>
-                </li>
-              </ul>
+
+              {/* Formulario de contato */}
+              <form onSubmit={handleSubmit}>
+                <ul>
+                  <li>
+                    <input
+                      placeholder="Name"
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                    />
+                  </li>
+                  <li>
+                    <input
+                      placeholder="E-mail"
+                      type="text"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                    />
+                  </li>
+                  <li>
+                    <input
+                      placeholder="Mensagem"
+                      type="text"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                    />
+                  </li>
+                  <li>
+                    <button type="submit" className={st.buttonCadastro}>
+                      Enviar contato
+                    </button>
+                  </li>
+                </ul>
+              </form>
+              
             </div>
           </div>
         </main>
@@ -80,9 +123,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Adicionar elementos nos cards depois */}
-      <div className={st.cards}></div>
-
       <div className={st.lastElement}>
         <div className={st.lastElement_Texts}>
           <h2 className={st.subtitle}>
@@ -97,7 +137,7 @@ const Home = () => {
             para otimizar sua gestão!
           </p>
           <Link to="/cadastro" className={st.buttonCadastro}>
-                Inicie de graça
+            Inicie de graça
           </Link>
         </div>
 

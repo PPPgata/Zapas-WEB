@@ -17,11 +17,6 @@ const Cadastro = () => {
 
   const handleClickRegister = (values) => {
     Axios.post("http://localhost:3001/register", {
-      email: values.email,
-      senha: values.password,
-      nome: values.enterpriseName,
-      segmento: values.enterpriseSegment,
-      cnpj: values.cnpj.replace(/[^\d]/g, ""),
     }).then((response) => {
       console.log(response);
       if (response.data.msg === "Cadastro realizado com sucesso!") {
@@ -63,7 +58,7 @@ const Cadastro = () => {
         </div>
         <Formik
           initialValues={{
-            email: "",
+            email: "",  
             password: "",
             confirmPassword: "",
             enterpriseName: "",

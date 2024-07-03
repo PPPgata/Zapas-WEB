@@ -14,14 +14,11 @@ const Login = () => {
 
   const handleClickLogin = (values) => {
     Axios.post("http://localhost:3001/login", {
-      email: values.email,
-      senha: values.password,
     })
       .then((response) => {
         console.log(response);
         if (response.data.msg === "Login realizado com sucesso!") {
-          localStorage.setItem("token", response.data.token);
-          navigate("/dashboard");
+          navigate("/estoques");
         } else {
           setLoginError(response.data.msg);
         }
